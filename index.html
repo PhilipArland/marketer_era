@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
-    <title>Account Settings</title>
+    <title>Dashboard</title>
     <link href="yeti.jpg" rel="icon">
     <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <link href="assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
@@ -38,7 +38,7 @@
                     <div class="sidebar-menu flex-grow-1">
                         <ul class="list-unstyled mb-0">
                             <li class="mb-2">
-                                <a href="index.html" class="p-2 rounded-3 text-decoration-none">
+                                <a href="index.html" class="p-2 rounded-3 text-decoration-none active">
                                     <i class="bi bi-speedometer2"></i>
                                     <span>Dashboard</span>
                                 </a>
@@ -58,7 +58,7 @@
                             </li>
 
                             <li class="mb-2">
-                                <a href="settings.html" class="p-2 rounded-3 text-decoration-none active">
+                                <a href="settings.html" class="p-2 rounded-3 text-decoration-none">
                                     <i class="bi bi-gear"></i>
                                     <span>Settings</span>
                                 </a>
@@ -78,14 +78,7 @@
             <!-- Main Content -->
             <div class="flex-grow-1">
 
-                <div class="card cozy-card p-4 shadow-sm rounded-4">
-                    <h4 class="mb-3">User Settings</h4>
-
-                    <label class="fw-semibold">User Name:</label>
-                    <input type="text" id="userName" class="form-control mb-3" placeholder="Enter Your Signature Name">
-
-                    <button id="saveSettingsBtn" class="btns btn-primary mt-3">Save Settings</button>
-                </div>
+                
 
 
             </div>
@@ -94,21 +87,6 @@
     </div>
 
     <script src="assets/js/main.js"></script>
-    <script>
-        // Save settings button action
-        document.getElementById("saveSettingsBtn").addEventListener("click", () => {
-            const nameInput = document.getElementById("userName").value.trim();
-
-            if (nameInput.length > 0) {
-                localStorage.setItem("username", nameInput);
-                alert("Settings saved!");
-                location.reload();
-            } else {
-                alert("Please enter a name.");
-            }
-        });
-    </script>
-
     <!-- JS Scripts -->
     <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 </body>
