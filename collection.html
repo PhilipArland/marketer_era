@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>Ez Collection</title>
+    <link href="assets/img/yeti.jpg" rel="icon">
+    <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+    <link href="assets/css/style2.css" rel="stylesheet">
+</head>
+
+<body>
+    <nav class="navbar d-md-none px-2">
+        <button class="navbar-toggler border-0" type="button" id="mobileSidebarToggle">
+            <i class="bi bi-list display-6" style="color: var(--text-navbar);"></i>
+        </button>
+
+        <div class="profile mx-2">
+            <img id="nav-profile-img" src="yeti.jpg" alt="Profile" class="img-fluid rounded-circle"
+                style="width: 40px; height: 40px; object-fit: cover;">
+        </div>
+    </nav>
+
+
+    <div class="container-fluid p-1 p-md-3">
+        <div class="d-flex">
+            <div id="left-sidebar"
+                class="card cozy-card rounded-4 shadow-sm border-0 p-3 me-3 d-none d-md-flex flex-column">
+                <div class="sidebar-page d-flex flex-column h-100">
+                    <div class="text-center mb-3 cozy-profile">
+                        <img id="sidebar-profile-img" src="yeti.jpg" alt="" class="img-fluid rounded-4">
+                        <p id="sidebar-username" class="mb-0 fw-semibold text-light">Cozy User</p>
+                    </div>
+
+                    <!-- menu grows to push footer down -->
+                    <div class="sidebar-menu flex-grow-1">
+                        <ul class="list-unstyled mb-0">
+                            <li class="mb-2">
+                                <a href="#" class="p-2 rounded-3 text-decoration-none">
+                                    <i class="bi bi-speedometer2"></i>
+                                    <span>Dashboard</span>
+                                </a>
+                            </li>
+                            <li class="mb-2">
+                                <a href="collection.html" class="p-2 rounded-3 text-decoration-none active">
+                                    <i class="bi bi-collection"></i>
+                                    <span>Collection</span>
+                                </a>
+                            </li>
+
+                            <li class="mb-2">
+                                <a href="webmail.html" class="p-2 rounded-3 text-decoration-none">
+                                    <i class="bi bi-envelope"></i>
+                                    <span>Webmail</span>
+                                </a>
+                            </li>
+
+                            <li class="mb-2">
+                                <a href="settings.html" class="p-2 rounded-3 text-decoration-none">
+                                    <i class="bi bi-gear"></i>
+                                    <span>Settings</span>
+                                </a>
+                            </li>
+
+                        </ul>
+                    </div>
+
+                    <!-- Footer pinned to bottom -->
+                    <div id="sidebar-footer" class="sidebar-footer text-center py-2">
+                        &copy; <span id="footer-year"></span>
+                        <span class="footer-extra">| Designed by Philip Arland Alili</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Main Content -->
+            <div class="flex-grow-1">
+                <div class="card cozy-card p-4 shadow-sm rounded-4">
+
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h4 class="mb-3">City Progress Tracker</h4>
+                        <button class="btn btn-outline-secondary btn-sm" onclick="resetAll()">Reset All</button>
+                    </div>
+
+                    <div class="d-flex gap-2">
+                        <div class="w-50">
+                            <label class="fw-semibold">Country:</label>
+                            <input type="text" id="countryInput" class="form-control mb-3"
+                                placeholder="Enter country..." oninput="saveToLocalStorage(); updateMessage();">
+                        </div>
+                        <div class="w-50">
+                            <label class="fw-semibold">Market Segment:</label>
+                            <input type="text" id="marketSegmentInput" class="form-control mb-3"
+                                placeholder="Enter Market Segment" oninput="saveToLocalStorage(); updateMessage();">
+                        </div>
+                    </div>
+
+                    <div class="d-flex align-items-center justify-content-between mb-1">
+                        <label class="fw-semibold mb-0">Cities (1 per line):</label>
+                        <button type="button" id="toggleCitiesBtn" class="btn btn-sm btn-outline-secondary ms-2">
+                            <i class="bi bi-dash-lg"></i>
+                        </button>
+                    </div>
+
+                    <div id="citiesWrapper">
+                        <textarea id="citiesInput" class="form-control mb-3" rows="5"
+                            placeholder="Enter cities separated by new line..."
+                            oninput="saveToLocalStorage(); updateMessage();"></textarea>
+
+                        <button class="btns btn-primary mb-3 w-100" onclick="generateCities()">Generate Cities</button>
+                    </div>
+
+                    <!-- Progress bar -->
+                    <div class="progress mb-3" style="height:20px;">
+                        <div id="progressBar" class="progress-bar bg-success" role="progressbar" style="width:0%">0%
+                        </div>
+                    </div>
+
+                    <!-- City List -->
+                    <div id="cityList" class="border rounded p-3" style="height:250px; overflow-y:auto;"></div>
+
+                    <!-- Generated message -->
+                    <label class="fw-semibold mt-3">Generated Message:</label>
+                    <textarea id="outputText" class="form-control mb-2" rows="3" readonly></textarea>
+                    <button class="btns btn-primary" onclick="copyOutput()">Copy Message</button>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script src="assets/js/main.js"></script>
+    <script>
+        function saveToLocalStorage() {
+            const data = {
+                country: countryInput.value.trim(),
+                marketSegment: marketSegmentInput.value.trim(),
+                cities: citiesInput.value.trim(),
+                checkboxes: Array.from(document.querySelectorAll("#cityList input[type='checkbox']")).map(cb => cb.checked),
+                message: outputText.value
+            };
+            localStorage.setItem("collectionData", JSON.stringify(data));
+        }
+
+        function loadFromLocalStorage() {
+            const stored = localStorage.getItem("collectionData");
+            let data = stored ? JSON.parse(stored) : {};
+
+            countryInput.value = data.country || "";
+            marketSegmentInput.value = data.marketSegment || "";
+            citiesInput.value = data.cities || "";
+
+            // generate checkboxes immediately
+            generateCities(data.checkboxes || []);
+
+            updateMessage();
+        }
+
+        function generateCities(savedCheckboxes = []) {
+            const cities = citiesInput.value.trim().split("\n").filter(c => c.trim() !== "");
+            cityList.innerHTML = "";
+
+            cities.forEach((city, idx) => {
+                const checked = savedCheckboxes[idx] ? "checked" : "";
+                cityList.innerHTML += `
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="city_${idx}" ${checked} onclick="updateMessage()">
+                <label class="form-check-label">${city}</label>
+            </div>
+        `;
+            });
+
+            updateProgress();
+            updateMessage();
+        }
+
+        function updateMessage() {
+            const username = localStorage.getItem("username") || "User";
+            const country = countryInput.value.trim();
+            const marketSegment = marketSegmentInput.value.trim();
+
+            // FIXED username display
+            const sidebarUsername = document.getElementById("sidebar-username");
+            if (sidebarUsername) sidebarUsername.textContent = username;
+
+            const boxes = document.querySelectorAll("#cityList input[type='checkbox']");
+            const labels = document.querySelectorAll("#cityList .form-check-label");
+
+            let cityText = "";
+            let nextCityText = "";
+
+            const lastChecked = Array.from(boxes).map(cb => cb.checked).lastIndexOf(true);
+
+            if (labels.length > 0) {
+                if (lastChecked === -1) {
+                    cityText = labels[0].innerText;
+                    nextCityText = labels.length > 1 ? labels[1].innerText : "";
+                } else {
+                    cityText = labels[lastChecked].innerText;
+                    nextCityText = (lastChecked + 1 < labels.length) ? labels[lastChecked + 1].innerText : "";
+                }
+            }
+
+            outputText.value =
+                `Hi, I have finished collecting company names and emails in ${cityText}, ${country} for ${marketSegment}. ` +
+                `${nextCityText ? `I will start collecting in ${nextCityText}, ${country} now.` : ""}
+
+- ${username}`;
+
+            updateProgress();
+            saveToLocalStorage();
+        }
+
+
+        function updateProgress() {
+            const boxes = document.querySelectorAll("#cityList input[type='checkbox']");
+            const checked = Array.from(boxes).filter(cb => cb.checked).length;
+
+            const percent = boxes.length ? Math.round((checked / boxes.length) * 100) : 0;
+
+            progressBar.style.width = percent + "%";
+            progressBar.textContent = percent + "%";
+        }
+
+        function copyOutput() {
+            outputText.select();
+            document.execCommand("copy");
+            alert("Copied!");
+        }
+
+        function resetAll() {
+            if (!confirm("Reset everything?")) return;
+
+            countryInput.value = "";
+            marketSegmentInput.value = "";
+            citiesInput.value = "";
+            cityList.innerHTML = "";
+            outputText.value = "";
+
+            updateProgress();
+            saveToLocalStorage();
+        }
+
+        document.getElementById("toggleCitiesBtn").addEventListener("click", () => {
+            const wrapper = document.getElementById("citiesWrapper");
+            const btnIcon = document.querySelector("#toggleCitiesBtn i");
+
+            if (wrapper.style.display === "none") {
+                wrapper.style.display = "block";
+                btnIcon.classList.remove("bi-plus-lg");
+                btnIcon.classList.add("bi-dash-lg");
+            } else {
+                wrapper.style.display = "none";
+                btnIcon.classList.remove("bi-dash-lg");
+                btnIcon.classList.add("bi-plus-lg");
+            }
+        });
+
+
+        window.onload = function () {
+            loadFromLocalStorage();
+        };
+
+    </script>
+    <!-- JS Scripts -->
+    <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,248 @@
+:root {
+    --bg-body: #eef0f2;
+    --bg-warm-cream: #faf7f2;
+    --bg-cozy-orange: #d4a574;
+    --bg-cozy-green: #28a745;
+    --bg-cozy-yellow: #ffc107;
+
+    --bg-deep-brown: #4a3f35;
+    --bg-soft-brown: #8b7355;
+    --bg-warm-gray: hsl(0, 0%, 42%);
+    --bg-gentle-green: #a8b5a0;
+    --bg-warm-red: #e35e59;
+    --bg-playlist: hsl(0, 0%, 42%);
+
+    --text-primary: #4a3f35;
+    --text-secondary: #7a6b57;
+    --text-soft: #f3ede4;
+    --text-orange: #d4a574;
+    --text-light: #f3ede4;
+    --text-brown: #8b7355;
+    --text-active: #faf7f2;
+    --text-navbar: #faf7f2;
+
+    --btn-primary: #4a3f35;
+    --btn-secondary: #8b7355;
+}
+
+body.dark-mode {
+    --bg-body: #2b2a28;
+    --bg-warm-cream: #4a3f35;
+    --bg-cozy-orange: #b87c4a;
+    --bg-cozy-green: #38d48b;
+    --bg-cozy-yellow: #ffe066;
+
+    --bg-deep-brown: #1f1e1c;
+    --bg-soft-brown: #665847;
+    --bg-warm-gray: hsl(0, 0%, 70%);
+    --bg-gentle-green: #6b7a65;
+    --bg-warm-red: #bc403c;
+    --bg-playlist: #2b2a28;
+
+
+    --text-primary: #faf7f2;
+    --text-secondary: #c0b7aa;
+    --text-orange: #d4a574;
+    --text-soft: #b8b8b8;
+    --text-light: #4a3f35;
+    --text-brown: #665847;
+    --text-active: #f5efe6;
+    --text-navbar: #d4a574;
+
+    --btn-primary: #b87c4a;
+    --btn-secondary: #1f1e1c;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body.no-scroll {
+    overflow: hidden;
+    height: 100vh;
+}
+
+body {
+    background-color: var(--bg-body);
+}
+
+.center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Left Sidebar */
+
+.cozy-profile img {
+    aspect-ratio: 1 / 1;
+    width: 100%;
+    max-width: 100%;
+    height: auto;
+    object-fit: cover;
+}
+
+#left-sidebar {
+    min-width: 260px;
+    max-width: 260px;
+    height: 95.6vh;
+    position: sticky;
+    top: 16px;
+    background-color: var(--bg-deep-brown);
+}
+
+#left-sidebar.closed .cozy-profile img {
+    width: 45px;
+    height: 45px;
+    border-radius: 8px !important;
+}
+
+
+#left-sidebar.closed {
+    min-width: 80px;
+    padding: 0;
+}
+
+#left-sidebar.closed .sidebar-footer .footer-extra {
+    display: none;
+}
+
+#left-sidebar .sidebar-header {
+    justify-content: space-between;
+}
+
+#left-sidebar.closed .sidebar-header {
+    justify-content: center;
+
+}
+
+#left-sidebar.closed .sidebar-menu span,
+#left-sidebar.closed h4,
+#left-sidebar.closed p {
+    display: none;
+}
+
+#left-sidebar.closed .sidebar-menu a {
+    justify-content: center;
+}
+
+.sidebar-menu a {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--text-active);
+    font-weight: 500;
+}
+
+.sidebar-menu a.active {
+    background: var(--bg-cozy-orange) !important;
+    color: var(--text-primary) !important;
+    font-weight: bold;
+}
+
+.navbar {
+    background-color: var(--bg-deep-brown);
+}
+
+.navbar button {
+    color: var(--bg-warm-cream);
+}
+
+
+/* Container for checkbox and label */
+.form-check {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+/* Hide default checkbox */
+.form-check-input {
+    appearance: none;
+    -webkit-appearance: none;
+    width: 1.4rem;
+    height: 1.4rem;
+    border: 2px solid #c0c0c0;
+    border-radius: 50%;
+    /* makes it round, use 4px for square */
+    background-color: #fff;
+    cursor: pointer;
+    position: relative;
+    transition: all 0.2s ease;
+}
+
+/* Checked state */
+.form-check-input:checked {
+    background-color: var(--bg-cozy-green);
+    /* or your primary color */
+    border-color: var(--bg-cozy-green);
+}
+
+/* Optional: Add checkmark inside */
+.form-check-input:checked::after {
+    content: "";
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #fff;
+}
+
+/* Label styling */
+.form-check-label {
+    cursor: pointer;
+    font-weight: 500;
+}
+
+.sidebar-footer {
+    color: var(--text-soft);
+    font-size: 0.8rem;
+    margin-top: auto;
+    border-top: 1px solid var(--bg-soft-brown);
+}
+
+
+
+.cozy-card {
+    background-color: var(--bg-warm-cream);
+
+    h5,
+    label,
+    p {
+        color: var(--text-primary);
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+/* Buttons */
+
+.btns {
+    border-radius: 6px;
+    padding: 4px 8px;
+    border: none;
+}
+
+.btn-primary,
+.btn-primary i {
+    background-color: var(--btn-primary);
+    color: var(--text-active);
+}
+
+.btn-secondary,
+.btn-secondary i {
+    background-color: var(--btn-secondary);
+    color: var(--text-active);
+}
