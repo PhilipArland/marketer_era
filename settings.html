@@ -12,6 +12,7 @@
 </head>
 
 <body>
+    <!-- Mobile Navbar -->
     <nav class="navbar d-md-none px-2">
         <button class="navbar-toggler border-0" type="button" id="mobileSidebarToggle">
             <i class="bi bi-list display-6" style="color: var(--text-navbar);"></i>
@@ -23,18 +24,19 @@
         </div>
     </nav>
 
-
     <div class="container-fluid p-1 p-md-3">
         <div class="d-flex">
+
+            <!-- Sidebar -->
             <div id="left-sidebar"
                 class="card cozy-card rounded-4 shadow-sm border-0 p-3 me-3 d-none d-md-flex flex-column">
                 <div class="sidebar-page d-flex flex-column h-100">
+
                     <div class="text-center mb-3 cozy-profile">
                         <img id="sidebar-profile-img" src="yeti.jpg" alt="" class="img-fluid rounded-4">
                         <p id="sidebar-username" class="mb-0 fw-semibold text-light">User</p>
                     </div>
 
-                    <!-- menu grows to push footer down -->
                     <div class="sidebar-menu flex-grow-1">
                         <ul class="list-unstyled mb-0">
                             <li class="mb-2">
@@ -43,6 +45,7 @@
                                     <span>Dashboard</span>
                                 </a>
                             </li>
+
                             <li class="mb-2">
                                 <a href="collection.html" class="p-2 rounded-3 text-decoration-none">
                                     <i class="bi bi-collection"></i>
@@ -63,30 +66,51 @@
                                     <span>Settings</span>
                                 </a>
                             </li>
-
                         </ul>
                     </div>
 
-                    <!-- Footer pinned to bottom -->
                     <div id="sidebar-footer" class="sidebar-footer text-center py-2">
                         &copy; <span id="footer-year"></span>
                         <span class="footer-extra">| Designed by Philip Arland Alili</span>
                     </div>
+
                 </div>
             </div>
 
             <!-- Main Content -->
             <div class="flex-grow-1">
 
-                <div class="card cozy-card p-4 shadow-sm rounded-4">
+                <!-- User Settings -->
+                <div class="card cozy-card p-4 shadow-sm rounded-4 mb-4">
                     <h4 class="mb-3">User Settings</h4>
 
                     <label class="fw-semibold">User Name:</label>
-                    <input type="text" id="userName" class="form-control mb-3" placeholder="Enter Your Signature Name">
+                    <input type="text" id="userName" class="form-control mb-3"
+                        placeholder="Enter Your Signature Name">
 
                     <button id="saveSettingsBtn" class="btns btn-primary mt-3">Save Settings</button>
                 </div>
 
+                <!-- Webmail Template Settings -->
+                <div class="card cozy-card p-4 shadow-sm rounded-4">
+                    <h4 class="mb-3">Webmail Templates</h4>
+
+                    <!-- Subject Template -->
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Subject Template</label>
+                        <input type="text" id="subjectTemplate" class="form-control rounded-3"
+                            placeholder="Use {company} as placeholder">
+                    </div>
+
+                    <!-- Body Template -->
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Body Template</label>
+                        <textarea id="bodyTemplate" class="form-control rounded-3" rows="6"
+                            placeholder="Use {company} as placeholder"></textarea>
+                    </div>
+
+                    <button id="saveTemplateBtn" class="btns btn-primary mt-2 w-100">Save Templates</button>
+                </div>
 
             </div>
 
@@ -95,21 +119,45 @@
 
     <script src="assets/js/main.js"></script>
     <script>
-        // Save settings button action
-        document.getElementById("saveSettingsBtn").addEventListener("click", () => {
-            const nameInput = document.getElementById("userName").value.trim();
+        document.addEventListener("DOMContentLoaded", () => {
+            const userNameInput = document.getElementById("userName");
+            const saveSettingsBtn = document.getElementById("saveSettingsBtn");
 
-            if (nameInput.length > 0) {
-                localStorage.setItem("username", nameInput);
-                alert("Settings saved!");
-                location.reload();
-            } else {
-                alert("Please enter a name.");
-            }
+            const subjectTemplate = document.getElementById("subjectTemplate");
+            const bodyTemplate = document.getElementById("bodyTemplate");
+            const saveTemplateBtn = document.getElementById("saveTemplateBtn");
+
+            // Load saved username
+            const savedName = localStorage.getItem("username");
+            if (savedName) userNameInput.value = savedName;
+
+            // Load saved templates
+            const savedTemplate = JSON.parse(localStorage.getItem("webmailTemplate") || "{}");
+            if (savedTemplate.subject) subjectTemplate.value = savedTemplate.subject;
+            if (savedTemplate.body) bodyTemplate.value = savedTemplate.body;
+
+            // Save username
+            saveSettingsBtn.addEventListener("click", () => {
+                const name = userNameInput.value.trim();
+                if (name) {
+                    localStorage.setItem("username", name);
+                    alert("User name saved!");
+                    location.reload();
+                } else {
+                    alert("Please enter a name.");
+                }
+            });
+
+            // Save templates
+            saveTemplateBtn.addEventListener("click", () => {
+                const subject = subjectTemplate.value.trim() || "Tailored mirror for {company}";
+                const body = bodyTemplate.value.trim() || "Dear {company},\n\nWe would love to present you with a tailored offer that matches your unique needs.\n\nBest regards,\nMirror Team";
+
+                localStorage.setItem("webmailTemplate", JSON.stringify({ subject, body }));
+                alert("Templates saved!");
+            });
         });
     </script>
-
-    <!-- JS Scripts -->
     <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 </body>
 

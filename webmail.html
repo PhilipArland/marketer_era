@@ -12,6 +12,8 @@
 </head>
 
 <body>
+
+    <!-- Mobile Navbar -->
     <nav class="navbar d-md-none px-2">
         <button class="navbar-toggler border-0" type="button" id="mobileSidebarToggle">
             <i class="bi bi-list display-6" style="color: var(--text-navbar);"></i>
@@ -23,18 +25,19 @@
         </div>
     </nav>
 
-
     <div class="container-fluid p-1 p-md-3">
         <div class="d-flex">
+
+            <!-- Sidebar -->
             <div id="left-sidebar"
                 class="card cozy-card rounded-4 shadow-sm border-0 p-3 me-3 d-none d-md-flex flex-column">
                 <div class="sidebar-page d-flex flex-column h-100">
+
                     <div class="text-center mb-3 cozy-profile">
                         <img id="sidebar-profile-img" src="yeti.jpg" alt="" class="img-fluid rounded-4">
                         <p id="sidebar-username" class="mb-0 fw-semibold text-light">User</p>
                     </div>
 
-                    <!-- menu grows to push footer down -->
                     <div class="sidebar-menu flex-grow-1">
                         <ul class="list-unstyled mb-0">
                             <li class="mb-2">
@@ -43,6 +46,7 @@
                                     <span>Dashboard</span>
                                 </a>
                             </li>
+
                             <li class="mb-2">
                                 <a href="collection.html" class="p-2 rounded-3 text-decoration-none">
                                     <i class="bi bi-collection"></i>
@@ -63,32 +67,109 @@
                                     <span>Settings</span>
                                 </a>
                             </li>
-
                         </ul>
                     </div>
 
-                    <!-- Footer pinned to bottom -->
                     <div id="sidebar-footer" class="sidebar-footer text-center py-2">
                         &copy; <span id="footer-year"></span>
                         <span class="footer-extra">| Designed by Philip Arland Alili</span>
                     </div>
+
                 </div>
             </div>
 
             <!-- Main Content -->
             <div class="flex-grow-1">
 
-                
+                <div class="cozy-card card rounded-4 shadow-sm border-0 p-4">
+                    <h4 class="mb-3">Ez Webmail</h4>
 
+                    <!-- Company Name Input -->
+                    <div class="mb-4">
+                        <label class="form-label fw-semibold">Company Name</label>
+                        <input type="text" id="companyInput" class="form-control rounded-3"
+                            placeholder="Enter company name...">
+                    </div>
+
+                    <!-- Email Subject -->
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Email Subject</label>
+                        <input type="text" id="emailSubject" class="form-control rounded-3" readonly>
+                        <button class="btns btn-primary mt-2 w-100" id="copySubject">
+                            <i class="bi bi-clipboard"></i> Copy Subject
+                        </button>
+                    </div>
+
+                    <!-- Email Body -->
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Email Body</label>
+                        <textarea id="emailBody" class="form-control rounded-3" rows="6" readonly></textarea>
+                        <button class="btns btn-primary mt-2 w-100" id="copyBody">
+                            <i class="bi bi-clipboard"></i> Copy Body
+                        </button>
+                    </div>
+
+                </div>
 
             </div>
-
         </div>
     </div>
 
+    <!-- Javascript -->
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+
+            const companyInput = document.getElementById("companyInput");
+            const subjectField = document.getElementById("emailSubject");
+            const bodyField = document.getElementById("emailBody");
+            const copySubjectBtn = document.getElementById("copySubject");
+            const copyBodyBtn = document.getElementById("copyBody");
+
+            // Fetch template from settings localStorage
+            const savedTemplate = JSON.parse(localStorage.getItem("webmailTemplate")) || {
+                subject: "Tailored mirror for {company}",
+                body: "Dear {company},\n\nWe would love to present you with a tailored offer that matches your unique needs.\n\nBest regards,\nMirror Team"
+            };
+
+            function updateMail() {
+                const company = companyInput.value.trim() || "";
+
+                // Replace {company} placeholder
+                subjectField.value = savedTemplate.subject.replace("{company}", company);
+                bodyField.value = savedTemplate.body.replace(/{company}/g, company);
+
+                // Save last used company to localStorage
+                localStorage.setItem("webmailLastCompany", company);
+            }
+
+            // Copy with highlight
+            function copyWithIndicator(field, button) {
+                navigator.clipboard.writeText(field.value);
+
+                field.style.background = "#fff3cd";
+                setTimeout(() => (field.style.background = ""), 1000);
+
+                const original = button.innerHTML;
+                button.innerHTML = `<i class="bi bi-check-circle"></i> Copied!`;
+                setTimeout(() => (button.innerHTML = original), 1000);
+            }
+
+            copySubjectBtn.addEventListener("click", () => copyWithIndicator(subjectField, copySubjectBtn));
+            copyBodyBtn.addEventListener("click", () => copyWithIndicator(bodyField, copyBodyBtn));
+
+            // Load last company used
+            const lastCompany = localStorage.getItem("webmailLastCompany") || "";
+            companyInput.value = lastCompany;
+
+            companyInput.addEventListener("input", updateMail);
+
+            updateMail();
+        });
+    </script>
+
     <script src="assets/js/main.js"></script>
-    <!-- JS Scripts -->
     <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
 </body>
 
 </html>
