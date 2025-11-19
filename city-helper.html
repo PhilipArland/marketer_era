@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
-    <title>City Helper</title>
+    <title>Ez Collection</title>
 
     <link href="yeti.jpg" rel="icon">
     <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
@@ -103,7 +103,7 @@
 Tirana	535,702
 Durres	122,034
 Elbasan	100,903"
-                        oninput="extractCities()"></textarea>
+                        oninput="extractCities(); saveData();"></textarea>
 
                     <!-- Output area -->
                     <label class="fw-semibold">City Names Only:</label>
@@ -118,11 +118,37 @@ Elbasan	100,903"
     </div>
 
     <script>
+        // Save to localStorage
+        function saveData() {
+            const raw = document.getElementById("rawInput").value;
+            const clean = document.getElementById("cleanOutput").value;
+
+            const data = {
+                rawInput: raw,
+                cleanOutput: clean
+            };
+
+            localStorage.setItem("cityHelperData", JSON.stringify(data));
+        }
+
+        // Load from localStorage
+        function loadData() {
+            const stored = localStorage.getItem("cityHelperData");
+
+            if (!stored) return;
+
+            const data = JSON.parse(stored);
+
+            document.getElementById("rawInput").value = data.rawInput || "";
+            document.getElementById("cleanOutput").value = data.cleanOutput || "";
+        }
+
         function extractCities() {
             const raw = document.getElementById("rawInput").value;
 
             if (!raw.trim()) {
                 document.getElementById("cleanOutput").value = "";
+                saveData();
                 return;
             }
 
@@ -138,6 +164,7 @@ Elbasan	100,903"
             }).filter(c => c !== "");
 
             document.getElementById("cleanOutput").value = cities.join("\n");
+            saveData();
         }
 
         function copyCities() {
@@ -146,6 +173,12 @@ Elbasan	100,903"
             document.execCommand("copy");
             alert("Cities copied!");
         }
+
+        // Load saved data when page opens
+        window.onload = function () {
+            loadData();
+            extractCities();
+        };
     </script>
 
     <script src="assets/js/main.js"></script>
