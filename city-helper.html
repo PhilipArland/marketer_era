@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>City Helper</title>
+
+    <link href="yeti.jpg" rel="icon">
+    <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+    <link href="assets/css/style2.css" rel="stylesheet">
+
+    <style>
+        .excel-box {
+            font-family: monospace;
+            white-space: pre;
+            background: #f8f9fa;
+            border: 1px solid #d2d2d2;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Mobile Navbar -->
+    <nav class="navbar d-md-none px-2">
+        <button class="navbar-toggler border-0" type="button" id="mobileSidebarToggle">
+            <i class="bi bi-list display-6" style="color: var(--text-navbar);"></i>
+        </button>
+
+        <div class="profile mx-2">
+            <img id="nav-profile-img" src="yeti.jpg" alt="Profile" class="img-fluid rounded-circle"
+                style="width: 40px; height: 40px; object-fit: cover;">
+        </div>
+    </nav>
+
+    <div class="container-fluid p-1 p-md-3">
+        <div class="d-flex">
+
+            <!-- Sidebar -->
+            <div id="left-sidebar"
+                class="card cozy-card rounded-4 border-0 p-3 me-3 d-none d-md-flex flex-column">
+                <div class="sidebar-page d-flex flex-column h-100">
+
+                    <div class="text-center mb-3 cozy-profile">
+                        <img id="sidebar-profile-img" src="yeti.jpg" alt="" class="img-fluid rounded-4">
+                        <p id="sidebar-username" class="mb-0 fw-semibold text-light">User</p>
+                    </div>
+
+                    <div class="sidebar-menu flex-grow-1">
+                        <ul class="list-unstyled mb-0">
+                            <li class="mb-2">
+                                <a href="index.html" class="p-2 rounded-3 text-decoration-none">
+                                    <i class="bi bi-speedometer2"></i>
+                                    <span>Dashboard</span>
+                                </a>
+                            </li>
+
+                            <li class="mb-2">
+                                <a href="collection.html" class="p-2 rounded-3 text-decoration-none active">
+                                    <i class="bi bi-collection"></i>
+                                    <span>Collection</span>
+                                </a>
+                            </li>
+
+                            <li class="mb-2">
+                                <a href="webmail.html" class="p-2 rounded-3 text-decoration-none">
+                                    <i class="bi bi-envelope"></i>
+                                    <span>Webmail</span>
+                                </a>
+                            </li>
+
+                            <li class="mb-2">
+                                <a href="settings.html" class="p-2 rounded-3 text-decoration-none">
+                                    <i class="bi bi-gear"></i>
+                                    <span>Settings</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div id="sidebar-footer" class="sidebar-footer text-center py-2">
+                        &copy; <span id="footer-year"></span>
+                        <span class="footer-extra">| Designed by Philip Arland Alili</span>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- Main Content -->
+            <div class="flex-grow-1">
+                <div class="card cozy-card border-0 p-4 rounded-4">
+
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h4 class="mb-0">Ez Paste</h4>
+                    </div>
+
+                    <!-- Input area -->
+                    <label class="fw-semibold">Paste raw list (City + Population):</label>
+                    <textarea id="rawInput" class="form-control excel-box mb-3" rows="10"
+                        placeholder="Example:
+Tirana	535,702
+Durres	122,034
+Elbasan	100,903"
+                        oninput="extractCities()"></textarea>
+
+                    <!-- Output area -->
+                    <label class="fw-semibold">City Names Only:</label>
+                    <textarea id="cleanOutput" class="form-control mb-2" rows="10" readonly></textarea>
+
+                    <button class="btns btn-primary" onclick="copyCities()">Copy Cities</button>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        function extractCities() {
+            const raw = document.getElementById("rawInput").value;
+
+            if (!raw.trim()) {
+                document.getElementById("cleanOutput").value = "";
+                return;
+            }
+
+            const lines = raw.split("\n");
+
+            const cities = lines.map(line => {
+                if (line.includes("\t")) {
+                    return line.split("\t")[0].trim();
+                }
+
+                const match = line.match(/^[^\d]+/);
+                return match ? match[0].trim() : "";
+            }).filter(c => c !== "");
+
+            document.getElementById("cleanOutput").value = cities.join("\n");
+        }
+
+        function copyCities() {
+            const output = document.getElementById("cleanOutput");
+            output.select();
+            document.execCommand("copy");
+            alert("Cities copied!");
+        }
+    </script>
+
+    <script src="assets/js/main.js"></script>
+    <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+</body>
+
+</html>
