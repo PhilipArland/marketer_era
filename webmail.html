@@ -81,7 +81,8 @@
             <!-- Main Content -->
             <div class="flex-grow-1">
 
-                <div class="cozy-card card rounded-4 shadow-sm border-0 p-4">
+                <!-- Webmail Card -->
+                <div class="cozy-card card rounded-4 shadow-sm border-0 p-4 mb-4">
                     <h4 class="mb-3">Ez Webmail</h4>
 
                     <!-- Company Name Input -->
@@ -108,7 +109,36 @@
                             <i class="bi bi-clipboard"></i> Copy Body
                         </button>
                     </div>
+                </div>
 
+                <!-- Progress Report Card -->
+                <div class="cozy-card card rounded-4 shadow-sm border-0 p-4">
+                    <h5 class="fw-bold mb-3">Progress Report</h5>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Country 1</label>
+                        <input type="text" id="country1" class="form-control rounded-3"
+                            placeholder="Enter first country...">
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Country 2</label>
+                        <input type="text" id="country2" class="form-control rounded-3"
+                            placeholder="Enter next country...">
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Market Segment</label>
+                        <input type="text" id="marketInput" class="form-control rounded-3"
+                            placeholder="Enter market segment...">
+                    </div>
+
+                    <label class="form-label fw-semibold">Generated Message</label>
+                    <textarea id="reportOutput" class="form-control rounded-3" rows="4" readonly></textarea>
+
+                    <button class="btns btn-primary mt-2 w-100" id="copyReport">
+                        <i class="bi bi-clipboard"></i> Copy Report
+                    </button>
                 </div>
 
             </div>
@@ -125,45 +155,80 @@
             const copySubjectBtn = document.getElementById("copySubject");
             const copyBodyBtn = document.getElementById("copyBody");
 
+            const country1 = document.getElementById("country1");
+            const country2 = document.getElementById("country2");
+            const marketInput = document.getElementById("marketInput");
+            const reportOutput = document.getElementById("reportOutput");
+
             // Fetch template from settings localStorage
             const savedTemplate = JSON.parse(localStorage.getItem("webmailTemplate")) || {
                 subject: "Tailored mirror for {company}",
                 body: "Dear {company},\n\nWe would love to present you with a tailored offer that matches your unique needs.\n\nBest regards,\nMirror Team"
             };
 
+            const username = localStorage.getItem("username") || "User";
+
+            // Load last used data
+            const savedData = JSON.parse(localStorage.getItem("webmailData") || "{}");
+            companyInput.value = savedData.company || "";
+            country1.value = savedData.country1 || "";
+            country2.value = savedData.country2 || "";
+            marketInput.value = savedData.market || "";
+
             function updateMail() {
                 const company = companyInput.value.trim() || "";
 
-                // Replace {company} placeholder
                 subjectField.value = savedTemplate.subject.replace("{company}", company);
                 bodyField.value = savedTemplate.body.replace(/{company}/g, company);
 
-                // Save last used company to localStorage
-                localStorage.setItem("webmailLastCompany", company);
+                saveToLocalStorage();
             }
 
-            // Copy with highlight
+            function updateReport() {
+                const c1 = country1.value.trim() || "Country 1";
+                const c2 = country2.value.trim() || "Country 2";
+                const market = marketInput.value.trim() || "your market segment";
+
+                reportOutput.value =
+`Hi team, I have finished sending webmails in ${c1} for ${market}. I will start sending webmails in ${c2} now.
+
+- ${username}`;
+
+                saveToLocalStorage();
+            }
+
+            function saveToLocalStorage() {
+                localStorage.setItem("webmailData", JSON.stringify({
+                    company: companyInput.value,
+                    country1: country1.value,
+                    country2: country2.value,
+                    market: marketInput.value
+                }));
+            }
+
             function copyWithIndicator(field, button) {
                 navigator.clipboard.writeText(field.value);
 
                 field.style.background = "#fff3cd";
-                setTimeout(() => (field.style.background = ""), 1000);
+                setTimeout(() => field.style.background = "", 1000);
 
                 const original = button.innerHTML;
                 button.innerHTML = `<i class="bi bi-check-circle"></i> Copied!`;
-                setTimeout(() => (button.innerHTML = original), 1000);
+                setTimeout(() => button.innerHTML = original, 1000);
             }
 
             copySubjectBtn.addEventListener("click", () => copyWithIndicator(subjectField, copySubjectBtn));
             copyBodyBtn.addEventListener("click", () => copyWithIndicator(bodyField, copyBodyBtn));
-
-            // Load last company used
-            const lastCompany = localStorage.getItem("webmailLastCompany") || "";
-            companyInput.value = lastCompany;
+            document.getElementById("copyReport").addEventListener("click", () => copyWithIndicator(reportOutput, document.getElementById("copyReport")));
 
             companyInput.addEventListener("input", updateMail);
+            country1.addEventListener("input", updateReport);
+            country2.addEventListener("input", updateReport);
+            marketInput.addEventListener("input", updateReport);
 
             updateMail();
+            updateReport();
+
         });
     </script>
 
