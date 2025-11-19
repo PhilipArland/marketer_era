@@ -73,10 +73,10 @@
                 <div class="card cozy-card border-0 p-4 rounded-4 mb-4">
                     <h4 class="mb-3">User Settings</h4>
 
-                    <label class="fw-semibold">User Name:</label>
+                    <label class="form-label fw-semibold">User Name</label>
                     <input type="text" id="userName" class="form-control mb-3" placeholder="Enter Your Signature Name">
 
-                    <button id="saveUserBtn" class="btns btn-primary mt-3 w-100">Save User Name</button>
+                    <button id="saveUserBtn" class="btns btn-primary w-100">Save User Name</button>
                 </div>
 
                 <!-- Webmail Template Settings -->
@@ -99,19 +99,8 @@
                 </div>
 
                 <!-- Dashboard Report Templates -->
-                <div class="card cozy-card border-0 p-4 rounded-4 border-0 mb-4">
+                <div class="card cozy-card border-0 p-4 rounded-4 border-0 mb-1">
                     <h4 class="mb-3">Dashboard Report Templates</h4>
-
-                    <p class="text-muted mb-3">
-                        Placeholders you can use:<br>
-                        <strong>{date}</strong>, <strong>{username}</strong><br>
-                        <strong>{companySection}</strong>, <strong>{responseSection}</strong><br>
-                        <strong>{emailSection}</strong>, <strong>{webmailSection}</strong><br>
-                        <strong>{countryLabel}</strong>, <strong>{country}</strong><br>
-                        <strong>{market}</strong>, <strong>{companyCount}</strong>, <strong>{emailCount}</strong><br>
-                        <strong>{emailsSent}</strong>, <strong>{webmailsSent}</strong>, <strong>{positive}</strong>,
-                        <strong>{negative}</strong>
-                    </p>
 
                     <!-- Main Template -->
                     <div class="mb-4">
@@ -228,7 +217,7 @@ No. of Negative Response: {negative}`;
                 const subject = document.getElementById("subjectTemplate").value.trim();
                 const body = document.getElementById("bodyTemplate").value.trim();
 
-                localStorage.setItem("webmailTemplates", JSON.stringify({ subject, body }));
+                localStorage.setItem("webmailTemplate", JSON.stringify({ subject, body }));
                 alert("Webmail templates saved!");
             });
 
