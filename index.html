@@ -4,37 +4,45 @@
 <head>
     <meta charset="utf-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
-    <title>Dashboard</title>
+    <title>Daily Generate Report</title>
     <link href="yeti.jpg" rel="icon">
     <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <link href="assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
     <link href="assets/css/style2.css" rel="stylesheet">
+    <style>
+        .toggle-btn.active {
+            background-color: #8b7355;
+            color: white;
+        }
+    </style>
 </head>
 
 <body>
+
+    <!-- Navbar -->
     <nav class="navbar d-md-none px-2">
         <button class="navbar-toggler border-0" type="button" id="mobileSidebarToggle">
             <i class="bi bi-list display-6" style="color: var(--text-navbar);"></i>
         </button>
-
         <div class="profile mx-2">
             <img id="nav-profile-img" src="yeti.jpg" alt="Profile" class="img-fluid rounded-circle"
                 style="width: 40px; height: 40px; object-fit: cover;">
         </div>
     </nav>
 
-
     <div class="container-fluid p-1 p-md-3">
         <div class="d-flex">
+
+            <!-- Sidebar -->
             <div id="left-sidebar"
                 class="card cozy-card rounded-4 shadow-sm border-0 p-3 me-3 d-none d-md-flex flex-column">
                 <div class="sidebar-page d-flex flex-column h-100">
+
                     <div class="text-center mb-3 cozy-profile">
                         <img id="sidebar-profile-img" src="yeti.jpg" alt="" class="img-fluid rounded-4">
                         <p id="sidebar-username" class="mb-0 fw-semibold text-light">User</p>
                     </div>
 
-                    <!-- menu grows to push footer down -->
                     <div class="sidebar-menu flex-grow-1">
                         <ul class="list-unstyled mb-0">
                             <li class="mb-2">
@@ -43,6 +51,7 @@
                                     <span>Dashboard</span>
                                 </a>
                             </li>
+
                             <li class="mb-2">
                                 <a href="collection.html" class="p-2 rounded-3 text-decoration-none">
                                     <i class="bi bi-collection"></i>
@@ -63,32 +72,240 @@
                                     <span>Settings</span>
                                 </a>
                             </li>
-
                         </ul>
                     </div>
 
-                    <!-- Footer pinned to bottom -->
                     <div id="sidebar-footer" class="sidebar-footer text-center py-2">
                         &copy; <span id="footer-year"></span>
                         <span class="footer-extra">| Designed by Philip Arland Alili</span>
                     </div>
+
                 </div>
             </div>
 
             <!-- Main Content -->
             <div class="flex-grow-1">
 
-                
+                <div class="cozy-card card rounded-4 shadow-sm border-0 p-4">
 
+                    <h4 class="mb-3">Daily Generate Report</h4>
+                    <div class="row g-4">
+                        <!-- LEFT COLUMN : INPUTS -->
+                        <div class="col-md-6">
+
+                            <!-- Toggle Buttons -->
+                            <div class="mb-3 d-flex gap-2">
+                                <button id="btnCollection"
+                                    class="btns btn-primary toggle-btn active">Collection</button>
+                                <button id="btnEmails" class="btns btn-primary toggle-btn">Emails</button>
+                                <button id="btnWebmails" class="btns btn-primary toggle-btn">Webmails</button>
+                            </div>
+                            <!-- COLLECTION INPUTS -->
+                            <div id="collectionSection">
+                                <h5 class="mb-3">Company Collection</h5>
+                                <input type="text" id="colCountry" class="form-control mb-2" placeholder="Country">
+                                <input type="text" id="colMarket" class="form-control mb-2"
+                                    placeholder="Market Segment">
+                                <input type="number" id="colCompanyCount" class="form-control mb-2"
+                                    placeholder="No. of Company Names Collected">
+                                <input type="number" id="colEmailCount" class="form-control mb-2"
+                                    placeholder="No. of Company Emails Collected">
+                                <hr>
+                            </div>
+
+                            <!-- EMAILS INPUTS -->
+                            <div id="emailsSection" style="display: none;">
+                                <h5 class="mb-3">Emails Collection</h5>
+                                <input type="text" id="emailCountry" class="form-control mb-2" placeholder="Country">
+                                <input type="text" id="emailMarket" class="form-control mb-2"
+                                    placeholder="Market Segment">
+                                <input type="text" id="emailProductLine" class="form-control mb-2"
+                                    placeholder="Product Line">
+                                <input type="number" id="emailCount" class="form-control mb-2"
+                                    placeholder="Emails Collected">
+                                <hr>
+                            </div>
+
+                            <!-- WEBMAILS INPUTS -->
+                            <div id="webmailsSection" style="display: none;">
+                                <h5 class="mb-3">Webmails Collection</h5>
+                                <input type="text" id="webmailCountry" class="form-control mb-2" placeholder="Country">
+                                <input type="text" id="webmailMarket" class="form-control mb-2"
+                                    placeholder="Market Segment">
+                                <input type="text" id="webmailProductLine" class="form-control mb-2"
+                                    placeholder="Product Line">
+                                <input type="number" id="webmailCount" class="form-control mb-2"
+                                    placeholder="Webmails Collected">
+                                <hr>
+                            </div>
+
+                            <div id="responseSection">
+                                <h5 class="mb-3">Response</h5>
+                                <input type="number" id="colPositive" class="form-control mb-2"
+                                    placeholder="No. of Positive Response">
+                                <input type="number" id="colNegative" class="form-control mb-2"
+                                    placeholder="No. of Negative Response">
+                            </div>
+
+                        </div>
+
+                        <!-- RIGHT COLUMN : GENERATED REPORT -->
+                        <div class="col-md-6 pb-5">
+                            <div class="d-flex align-items-center justify-content-between mb-2">
+                                <h5 class="mb-2">Generated Report</h5>
+                                <button id="copyReportBtn" class="btns btn-primary">
+                                    <i class="bi bi-clipboard"></i> Copy Report
+                                </button>
+                            </div>
+                            <textarea id="dailyReport" class="form-control h-100" readonly></textarea>
+
+                        </div>
+                    </div>
+                </div>
 
             </div>
-
         </div>
     </div>
 
+    <!-- Scripts -->
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const username = localStorage.getItem("username") || "User";
+            const reportField = document.getElementById("dailyReport");
+
+            // Load templates from localStorage
+            const savedTemplates = JSON.parse(localStorage.getItem("dashboardReportTemplate") || "{}");
+
+            // Main template
+            const mainTemplate = savedTemplates.main || `{date}
+
+    {companySection}
+
+    {emailSection}
+
+    {webmailSection}
+
+    No. of Positive Response: {positive}
+    No. of Negative Response: {negative}
+
+    Thank you.
+
+    - {username}`;
+
+            // Section templates fallback
+            const companyTemplate = savedTemplates.company || "COMPANY COLLECTION\n{countryLabel}: {country}\nMarket: {market}\nNames Collected: {companyCount}\nEmails Collected: {emailCount}";
+            const emailTemplate = savedTemplates.email || "EMAILS COLLECTION\n{countryLabel}: {country}\nMarket: {market}\nEmails Collected: {emailCount}";
+            const webmailTemplate = savedTemplates.webmail || "WEBMAILS COLLECTION\n{countryLabel}: {country}\nMarket: {market}\nWebmails Collected: {webmailCount}";
+
+            // Helper: format countries
+            function formatCountries(input) {
+                const text = input.trim();
+                if (!text) return { label: "Country", text: "" };
+                const parts = text.split(/,|and/i).map(s => s.trim()).filter(Boolean);
+                return { label: parts.length > 1 ? "Countries" : "Country", text };
+            }
+
+            // Helper: format numbers
+            function formatNumber(input) {
+                return input || "0";
+            }
+
+            // Generate section text
+            // Generate section text
+            function generateSection(type) {
+                if (type === 'company') {
+                    const country = formatCountries(document.getElementById("colCountry").value);
+                    return companyTemplate
+                        .replace(/{country}/g, country.text)
+                        .replace(/{countryLabel}/g, country.label)
+                        .replace(/{market}/g, document.getElementById("colMarket").value || "")
+                        .replace(/{companyCount}/g, formatNumber(document.getElementById("colCompanyCount").value))
+                        .replace(/{emailCount}/g, formatNumber(document.getElementById("colEmailCount").value));
+                }
+
+                if (type === 'email') {
+                    const country = formatCountries(document.getElementById("emailCountry").value);
+                    return emailTemplate
+                        .replace(/{country}/g, country.text)
+                        .replace(/{countryLabel}/g, country.label)
+                        .replace(/{market}/g, document.getElementById("emailMarket").value || "")
+                        .replace(/{productLine}/g, document.getElementById("emailProductLine").value || "")
+                        .replace(/{emailsSent}/g, formatNumber(document.getElementById("emailCount").value));
+                }
+
+                if (type === 'webmail') {
+                    const country = formatCountries(document.getElementById("webmailCountry").value);
+                    return webmailTemplate
+                        .replace(/{country}/g, country.text)
+                        .replace(/{countryLabel}/g, country.label)
+                        .replace(/{market}/g, document.getElementById("webmailMarket").value || "")
+                        .replace(/{productLine}/g, document.getElementById("webmailProductLine").value || "")
+                        .replace(/{webmailsSent}/g, formatNumber(document.getElementById("webmailCount").value));
+                }
+            }
+
+            function generateReport() {
+                const now = new Date();
+                let today = now.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+
+                // Add "(Mid-Day Report)" if before 1 PM
+                if (now.getHours() < 13) {
+                    today += " (Mid-Day Report)";
+                }
+
+                // Only include visible sections
+                const companyText = document.getElementById("collectionSection").style.display !== "none"
+                    ? generateSection('company') : "";
+
+                const emailText = document.getElementById("emailsSection").style.display !== "none"
+                    ? generateSection('email') : "";
+
+                const webmailText = document.getElementById("webmailsSection").style.display !== "none"
+                    ? generateSection('webmail') : "";
+
+                const positive = formatNumber(document.getElementById("colPositive").value);
+                const negative = formatNumber(document.getElementById("colNegative").value);
+
+                const bodySections = [companyText, emailText, webmailText].filter(s => s.trim() !== "");
+                const bodyText = bodySections.join("\n\n");
+
+                reportField.value = `${today}\n\n${bodyText}\n\nNo. of Positive Response: ${positive}\nNo. of Negative Response: ${negative}\n\nThank you.\n\n- ${localStorage.getItem("username") || "User"}`;
+            }
+
+
+
+            // Toggle buttons
+            function toggleSection(button, section) {
+                button.classList.toggle("active");
+                section.style.display = section.style.display === "none" ? "block" : "none";
+                generateReport();
+            }
+
+            document.getElementById("btnCollection").addEventListener("click", () => toggleSection(document.getElementById("btnCollection"), document.getElementById("collectionSection")));
+            document.getElementById("btnEmails").addEventListener("click", () => toggleSection(document.getElementById("btnEmails"), document.getElementById("emailsSection")));
+            document.getElementById("btnWebmails").addEventListener("click", () => toggleSection(document.getElementById("btnWebmails"), document.getElementById("webmailsSection")));
+
+            // Input change listener
+            document.querySelectorAll('#collectionSection input, #emailsSection input, #webmailsSection input, #responseSection input')
+                .forEach(input => input.addEventListener('input', generateReport));
+
+            // Copy button
+            document.getElementById("copyReportBtn").addEventListener("click", () => {
+                navigator.clipboard.writeText(reportField.value);
+                const btn = document.getElementById("copyReportBtn");
+                btn.innerHTML = `<i class="bi bi-check-circle"></i> Copied!`;
+                setTimeout(() => btn.innerHTML = `<i class="bi bi-clipboard"></i> Copy Report`, 1000);
+            });
+
+            // Initial report
+            generateReport();
+        });
+    </script>
+
+
     <script src="assets/js/main.js"></script>
-    <!-- JS Scripts -->
     <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
 </body>
 
 </html>
