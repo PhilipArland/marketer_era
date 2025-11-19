@@ -173,31 +173,32 @@
             const username = localStorage.getItem("username") || "User";
             const reportField = document.getElementById("dailyReport");
 
-            // Load templates from localStorage
+            // --- Templates ---
+            const defaultTemplates = {
+                main: `{date}\n\n{companySection}\n\n{emailSection}\n\n{webmailSection}\n\nNo. of Positive Response: {positive}\nNo. of Negative Response: {negative}\n\nThank you.\n\n- {username}`,
+                company: "COMPANY COLLECTION\n{countryLabel}: {country}\nMarket Segment: {market}\nNo. of Company Names Collected: {companyCount}\nNo. of Company Emails Collected: {emailCount}",
+                email: "EMAILS COLLECTION\n{countryLabel}: {country}\nMarket Segment: {market}\nProduct Line: {productLine}\nEmails Sent: {emailsSent}",
+                webmail: "WEBMAILS COLLECTION\n{countryLabel}: {country}\nMarket Segment: {market}\nnProduct Line: {productLine}\nWebmails Sent: {webmailsSent}"
+            };
+
+            // Load templates from localStorage or fallback
             const savedTemplates = JSON.parse(localStorage.getItem("dashboardReportTemplate") || "{}");
+            const templates = {
+                main: savedTemplates.main || defaultTemplates.main,
+                company: savedTemplates.company || defaultTemplates.company,
+                email: savedTemplates.email || defaultTemplates.email,
+                webmail: savedTemplates.webmail || defaultTemplates.webmail
+            };
 
-            // Main template
-            const mainTemplate = savedTemplates.main || `{date}
+            // --- Restore saved report data ---
+            const reportData = JSON.parse(localStorage.getItem("dailyReportData") || "{}");
+            for (const key in reportData) {
+                if (document.getElementById(key)) {
+                    document.getElementById(key).value = reportData[key];
+                }
+            }
 
-    {companySection}
-
-    {emailSection}
-
-    {webmailSection}
-
-    No. of Positive Response: {positive}
-    No. of Negative Response: {negative}
-
-    Thank you.
-
-    - {username}`;
-
-            // Section templates fallback
-            const companyTemplate = savedTemplates.company || "COMPANY COLLECTION\n{countryLabel}: {country}\nMarket: {market}\nNames Collected: {companyCount}\nEmails Collected: {emailCount}";
-            const emailTemplate = savedTemplates.email || "EMAILS COLLECTION\n{countryLabel}: {country}\nMarket: {market}\nEmails Collected: {emailCount}";
-            const webmailTemplate = savedTemplates.webmail || "WEBMAILS COLLECTION\n{countryLabel}: {country}\nMarket: {market}\nWebmails Collected: {webmailCount}";
-
-            // Helper: format countries
+            // --- Helpers ---
             function formatCountries(input) {
                 const text = input.trim();
                 if (!text) return { label: "Country", text: "" };
@@ -205,37 +206,32 @@
                 return { label: parts.length > 1 ? "Countries" : "Country", text };
             }
 
-            // Helper: format numbers
             function formatNumber(input) {
                 return input || "0";
             }
 
-            // Generate section text
-            // Generate section text
             function generateSection(type) {
                 if (type === 'company') {
                     const country = formatCountries(document.getElementById("colCountry").value);
-                    return companyTemplate
+                    return templates.company
                         .replace(/{country}/g, country.text)
                         .replace(/{countryLabel}/g, country.label)
                         .replace(/{market}/g, document.getElementById("colMarket").value || "")
                         .replace(/{companyCount}/g, formatNumber(document.getElementById("colCompanyCount").value))
                         .replace(/{emailCount}/g, formatNumber(document.getElementById("colEmailCount").value));
                 }
-
                 if (type === 'email') {
                     const country = formatCountries(document.getElementById("emailCountry").value);
-                    return emailTemplate
+                    return templates.email
                         .replace(/{country}/g, country.text)
                         .replace(/{countryLabel}/g, country.label)
                         .replace(/{market}/g, document.getElementById("emailMarket").value || "")
                         .replace(/{productLine}/g, document.getElementById("emailProductLine").value || "")
                         .replace(/{emailsSent}/g, formatNumber(document.getElementById("emailCount").value));
                 }
-
                 if (type === 'webmail') {
                     const country = formatCountries(document.getElementById("webmailCountry").value);
-                    return webmailTemplate
+                    return templates.webmail
                         .replace(/{country}/g, country.text)
                         .replace(/{countryLabel}/g, country.label)
                         .replace(/{market}/g, document.getElementById("webmailMarket").value || "")
@@ -244,24 +240,15 @@
                 }
             }
 
+            // --- Generate full report ---
             function generateReport() {
                 const now = new Date();
                 let today = now.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+                if (now.getHours() < 13) today += " (Mid-Day Report)";
 
-                // Add "(Mid-Day Report)" if before 1 PM
-                if (now.getHours() < 13) {
-                    today += " (Mid-Day Report)";
-                }
-
-                // Only include visible sections
-                const companyText = document.getElementById("collectionSection").style.display !== "none"
-                    ? generateSection('company') : "";
-
-                const emailText = document.getElementById("emailsSection").style.display !== "none"
-                    ? generateSection('email') : "";
-
-                const webmailText = document.getElementById("webmailsSection").style.display !== "none"
-                    ? generateSection('webmail') : "";
+                const companyText = document.getElementById("collectionSection").style.display !== "none" ? generateSection('company') : "";
+                const emailText = document.getElementById("emailsSection").style.display !== "none" ? generateSection('email') : "";
+                const webmailText = document.getElementById("webmailsSection").style.display !== "none" ? generateSection('webmail') : "";
 
                 const positive = formatNumber(document.getElementById("colPositive").value);
                 const negative = formatNumber(document.getElementById("colNegative").value);
@@ -269,12 +256,21 @@
                 const bodySections = [companyText, emailText, webmailText].filter(s => s.trim() !== "");
                 const bodyText = bodySections.join("\n\n");
 
-                reportField.value = `${today}\n\n${bodyText}\n\nNo. of Positive Response: ${positive}\nNo. of Negative Response: ${negative}\n\nThank you.\n\n- ${localStorage.getItem("username") || "User"}`;
+                reportField.value = `${today}\n\n${bodyText}\n\nNo. of Positive Response: ${positive}\nNo. of Negative Response: ${negative}\n\nThank you.\n\n- ${username}`;
+
+                // Save inputs automatically
+                saveReportData();
             }
 
+            // --- Save inputs ---
+            function saveReportData() {
+                const data = {};
+                document.querySelectorAll('#collectionSection input, #emailsSection input, #webmailsSection input, #responseSection input')
+                    .forEach(input => data[input.id] = input.value);
+                localStorage.setItem("dailyReportData", JSON.stringify(data));
+            }
 
-
-            // Toggle buttons
+            // --- Toggle sections ---
             function toggleSection(button, section) {
                 button.classList.toggle("active");
                 section.style.display = section.style.display === "none" ? "block" : "none";
@@ -285,11 +281,11 @@
             document.getElementById("btnEmails").addEventListener("click", () => toggleSection(document.getElementById("btnEmails"), document.getElementById("emailsSection")));
             document.getElementById("btnWebmails").addEventListener("click", () => toggleSection(document.getElementById("btnWebmails"), document.getElementById("webmailsSection")));
 
-            // Input change listener
+            // --- Input listeners ---
             document.querySelectorAll('#collectionSection input, #emailsSection input, #webmailsSection input, #responseSection input')
                 .forEach(input => input.addEventListener('input', generateReport));
 
-            // Copy button
+            // --- Copy report ---
             document.getElementById("copyReportBtn").addEventListener("click", () => {
                 navigator.clipboard.writeText(reportField.value);
                 const btn = document.getElementById("copyReportBtn");
@@ -297,11 +293,10 @@
                 setTimeout(() => btn.innerHTML = `<i class="bi bi-clipboard"></i> Copy Report`, 1000);
             });
 
-            // Initial report
+            // --- Initial report generation ---
             generateReport();
         });
     </script>
-
 
     <script src="assets/js/main.js"></script>
     <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
