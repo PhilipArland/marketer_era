@@ -98,52 +98,13 @@
                     <button id="saveWebmailBtn" class="btns btn-primary w-100">Save Webmail Templates</button>
                 </div>
 
-                <!-- Dashboard Report Templates -->
-                <div class="card cozy-card border-0 p-4 rounded-4 border-0 mb-1">
-                    <h4 class="mb-3">Dashboard Report Templates</h4>
-
-                    <!-- Main Template -->
-                    <div class="mb-4">
-                        <label class="form-label fw-semibold">Main Report Template</label>
-                        <textarea id="mainTemplate" class="form-control" rows="8"></textarea>
-                    </div>
-
-                    <!-- Company Section Template -->
-                    <div class="mb-4">
-                        <label class="form-label fw-semibold">Company Collection Template</label>
-                        <textarea id="companyTemplate" class="form-control" rows="7"></textarea>
-                    </div>
-
-                    <!-- Email Section Template -->
-                    <div class="mb-4">
-                        <label class="form-label fw-semibold">Email Collection Template</label>
-                        <textarea id="emailTemplate" class="form-control" rows="6"
-                            placeholder="Use {country}, {market}, {productLine}, {emailsSent} as placeholders"></textarea>
-                    </div>
-
-                    <!-- Webmail Section Template -->
-                    <div class="mb-4">
-                        <label class="form-label fw-semibold">Webmail Collection Template</label>
-                        <textarea id="webmailTemplate" class="form-control" rows="6"
-                            placeholder="Use {country}, {market}, {productLine}, {webmailsSent} as placeholders"></textarea>
-                    </div>
-
-                    <!-- Response Template -->
-                    <div class="mb-4">
-                        <label class="form-label fw-semibold">Response Template</label>
-                        <textarea id="responseTemplate" class="form-control" rows="6"
-                            placeholder="Use {positive}, {negative} as placeholders"></textarea>
-                    </div>
-
-                    <button id="saveDashboardBtn" class="btns btn-primary w-100">
-                        <i class="bi bi-save"></i> Save Report Templates
-                    </button>
-                </div>
+                <!-- Reset All -->
                 <div class="card cozy-card border-0 p-4 rounded-4 mb-4">
                     <button id="resetAllBtn" class="btn btn-danger w-100">
                         <i class="bi bi-arrow-clockwise"></i> Reset All Settings
                     </button>
                 </div>
+
             </div>
         </div>
     </div>
@@ -156,53 +117,9 @@
             if (savedName) document.getElementById("userName").value = savedName;
 
             // Load webmail templates
-            const savedWebmail = JSON.parse(localStorage.getItem("webmailTemplates") || "{}");
+            const savedWebmail = JSON.parse(localStorage.getItem("webmailTemplate") || "{}");
             if (savedWebmail.subject) document.getElementById("subjectTemplate").value = savedWebmail.subject;
             if (savedWebmail.body) document.getElementById("bodyTemplate").value = savedWebmail.body;
-
-            // Load dashboard report templates
-            const savedReport = JSON.parse(localStorage.getItem("dashboardReportTemplate") || "{}");
-
-            const defaultMain = `{date}
-
-{companySection}
-
-{emailSection}
-
-{webmailSection}
-
-{responseSection}
-
-Thank you.
-
-- {username}`;
-
-            const defaultCompany = `COMPANY COLLECTION
-{countryLabel}: {country}
-Market Segment: {market}
-No. of Company Names Collected: {companyCount}
-No. of Company Emails Collected: {emailCount}`;
-
-            const defaultEmail = `EMAIL COLLECTION
-{countryLabel}: {country}
-Market Segment: {market}
-Product Line: {productLine}
-No. of Emails Sent: {emailsSent}`;
-
-            const defaultWebmail = `WEBMAIL COLLECTION
-{countryLabel}: {country}
-Market Segment: {market}
-Product Line: {productLine}
-No. of Webmails Sent: {webmailsSent}`;
-
-            const defaultResponse = `No. of Positive Response: {positive}
-No. of Negative Response: {negative}`;
-
-            document.getElementById("mainTemplate").value = savedReport.main || defaultMain;
-            document.getElementById("companyTemplate").value = savedReport.company || defaultCompany;
-            document.getElementById("responseTemplate").value = savedReport.response || defaultResponse;
-            document.getElementById("emailTemplate").value = savedReport.email || defaultEmail;
-            document.getElementById("webmailTemplate").value = savedReport.webmail || defaultWebmail;
 
             // Save user name
             document.getElementById("saveUserBtn").addEventListener("click", () => {
@@ -221,51 +138,21 @@ No. of Negative Response: {negative}`;
                 alert("Webmail templates saved!");
             });
 
-            // Save dashboard templates
-            document.getElementById("saveDashboardBtn").addEventListener("click", () => {
-                const main = document.getElementById("mainTemplate").value.trim();
-                const company = document.getElementById("companyTemplate").value.trim();
-                const response = document.getElementById("responseTemplate").value.trim();
-                const email = document.getElementById("emailTemplate").value.trim();
-                const webmail = document.getElementById("webmailTemplate").value.trim();
-
-                localStorage.setItem("dashboardReportTemplate", JSON.stringify({
-                    main,
-                    company,
-                    response,
-                    email,
-                    webmail
-                }));
-
-                let btn = document.getElementById("saveDashboardBtn");
-                btn.innerHTML = `<i class="bi bi-check-circle"></i> Saved!`;
-                setTimeout(() => {
-                    btn.innerHTML = `<i class="bi bi-save"></i> Save Report Templates`;
-                }, 1200);
-            });
-
             // Reset All Settings
             document.getElementById("resetAllBtn").addEventListener("click", () => {
                 // Clear all saved data in localStorage
                 localStorage.removeItem("username");
-                localStorage.removeItem("webmailTemplates");
-                localStorage.removeItem("dashboardReportTemplate");
+                localStorage.removeItem("webmailTemplate");
 
-                // Reset input fields to default values
+                // Reset input fields
                 document.getElementById("userName").value = "";
                 document.getElementById("subjectTemplate").value = "";
                 document.getElementById("bodyTemplate").value = "";
-                document.getElementById("mainTemplate").value = defaultMain;
-                document.getElementById("companyTemplate").value = defaultCompany;
-                document.getElementById("responseTemplate").value = defaultResponse;
-                document.getElementById("emailTemplate").value = defaultEmail;
-                document.getElementById("webmailTemplate").value = defaultWebmail;
 
                 alert("All settings have been reset!");
             });
 
         });
-
     </script>
 
     <script src="assets/js/main.js"></script>

@@ -576,7 +576,7 @@ Thank you.
             if (workdaysLeft === 0) {
                 paydayMsg.textContent = `Today is payday! (${formatDate(payday)})`;
             } else {
-                paydayMsg.textContent = `${workdaysLeft} working day${workdaysLeft !== 1 ? "s" : ""} left before pay day! ${formatDate(payday)}`;
+                paydayMsg.textContent = `${formatDate(payday)} | ${workdaysLeft} working day${workdaysLeft !== 1 ? "s" : ""} left before pay day!`;
             }
 
 
