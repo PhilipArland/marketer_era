@@ -39,8 +39,7 @@
         <div class="d-flex">
 
             <!-- Sidebar -->
-            <div id="left-sidebar"
-                class="card cozy-card rounded-4 border-0 p-3 me-3 d-none d-md-flex flex-column">
+            <div id="left-sidebar" class="card cozy-card rounded-4 border-0 p-3 me-3 d-none d-md-flex flex-column">
                 <div class="sidebar-page d-flex flex-column h-100">
 
                     <div class="text-center mb-3 cozy-profile">
@@ -92,18 +91,20 @@
             <div class="flex-grow-1">
                 <div class="card cozy-card border-0 p-4 rounded-4">
 
-                    <div class="d-flex justify-content-between align-items-center mb-3">
-                        <h4 class="mb-0">Ez Paste</h4>
+                    <div class="d-flex align-items-center mb-3 gap-2">
+                        <a href="collection.html" class="text-decoration-none text-dark">
+                            <i class="bi bi-arrow-left"></i>
+                        </a>
+                        <h4 class="mb-0">Ez Collection</h4>
                     </div>
+
 
                     <!-- Input area -->
                     <label class="fw-semibold">Paste raw list (City + Population):</label>
-                    <textarea id="rawInput" class="form-control excel-box mb-3" rows="10"
-                        placeholder="Example:
+                    <textarea id="rawInput" class="form-control excel-box mb-3" rows="10" placeholder="Example:
 Tirana	535,702
 Durres	122,034
-Elbasan	100,903"
-                        oninput="extractCities(); saveData();"></textarea>
+Elbasan	100,903" oninput="extractCities(); saveData();"></textarea>
 
                     <!-- Output area -->
                     <label class="fw-semibold">City Names Only:</label>
