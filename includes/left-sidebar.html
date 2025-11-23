@@ -1,0 +1,81 @@
+<style>
+    .sidebar-page {
+        .bi-music-note {
+            color: var(--text-orange);
+        }
+
+        .sidebar-header h4,
+        .cozy-profile p,
+        .sidebar-menu i {
+            color: var(--text-active) !important;
+        }
+
+        .sidebar-header button {
+            background-color: var(--bg-cozy-orange) !important;
+            color: var(--text-primary)
+        }
+
+        .sidebar-menu a.active i {
+            color: var(--text-primary) !important;
+        }
+    }
+</style>
+
+<div class="sidebar-page d-flex flex-column h-100">
+    <!-- <div class="sidebar-header d-flex align-items-center mb-3">
+        <h4 class="fw-bold m-0">
+            <i class="bi bi-music-note me-1"></i>
+            Cozy Cove
+        </h4>
+        <button id="toggle-btn" class="btn rounded-2" title="Toggle Sidebar">
+            <i class="bi bi-list"></i>
+        </button>
+    </div> -->
+
+    <div class="text-center mb-3 cozy-profile">
+        <img id="sidebar-profile-img" src="assets/img/2.png" alt="" class="img-fluid rounded-4">
+        <p id="sidebar-username" class="mb-0 fw-semibold">User</p>
+    </div>
+
+    <!-- menu grows to push footer down -->
+    <div class="sidebar-menu flex-grow-1">
+        <ul class="list-unstyled mb-0">
+            <li class="mb-2">
+                <a href="#" data-page="dashboard" class="p-2 rounded-3 text-decoration-none active">
+                    <i class="bi bi-speedometer2"></i>
+                    <span>Dashboard</span>
+                </a>
+            </li>
+            <li class="mb-2">
+                <a href="#" data-page="collection" class="p-2 rounded-3 text-decoration-none">
+                    <i class="bi bi-collection"></i>
+                    <span>Collection</span>
+                </a>
+            </li>
+            <li class="mb-2">
+                <a href="#" data-page="webmails" class="p-2 rounded-3 text-decoration-none">
+                    <i class="bi bi-envelope"></i>
+                    <span>Webmails</span>
+                </a>
+            </li>
+            <li class="mb-2">
+                <a href="#" data-page="helper" class="p-2 rounded-3 text-decoration-none">
+                    <i class="bi bi-tools"></i>
+                    <span>Helper</span>
+                </a>
+            </li>
+            <li class="mb-2">
+                <a href="#" data-page="settings" class="p-2 rounded-3 text-decoration-none">
+                    <i class="bi bi-gear"></i>
+                    <span>Settings</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+
+    <!-- Footer pinned to bottom -->
+    <div id="sidebar-footer" class="sidebar-footer text-center py-2">
+        &copy; <span id="footer-year"></span>
+        <span class="footer-extra">| Designed by Flipped</span>
+    </div>
+</div>

@@ -1,0 +1,131 @@
+<div class="row g-2 g-md-3 settings-page">
+    <div class="col-lg-12">
+        <div class="card cozy-card rounded-4 border-0 shadow-sm p-3 p-md-4 d-flex flex-row align-items-center">
+            <div class="me-3">
+                <i class="bi bi-person-gear display-1"></i>
+            </div>
+            <div>
+                <h5 class="fw-bold mb-1"> Customize your profile ✨ </h5>
+                <p class="mb-0 small">
+                    Change your display name, upload a new picture, and adjust settings so this dashboard feels truly
+                    <span class="highlight">yours</span>.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Profile Settings -->
+    <div class="col-lg-12">
+        <div class="card cozy-card rounded-4 border-0 shadow-sm p-4">
+            <h5 class="settings-title mb-3"> <i class="bi bi-gear-fill me-2"></i>Profile Settings </h5>
+
+            <div class="mb-3">
+                <label for="username" class="form-label fw-bold">Display Name</label>
+                <input type="text" id="username" class="form-control custom-text-input" placeholder="Enter your name">
+            </div>
+
+            <div class="mb-3">
+                <label for="profile-img" class="form-label fw-bold">Profile Image</label>
+                <div class="upload-box text-center p-3 rounded-3">
+                    <i class="bi bi-cloud-arrow-up fs-2 d-block mb-2"></i>
+                    <input type="file" id="profile-img" accept="image/*" class="form-control custom-input d-none">
+                    <button type="button" id="upload-btn" class="btns btn-primary"
+                        onclick="document.getElementById('profile-img').click();">
+                        Upload Image
+                    </button>
+                    <div id="preview-container" class="mt-3"></div>
+                </div>
+            </div>
+
+            <button id="save-settings" class="btns btn-primary w-100">
+                <i class="bi bi-check2-circle px-1"></i> Save
+            </button>
+        </div>
+    </div>
+
+    <div class="col-lg-12">
+        <div class="card cozy-card rounded-4 border-0 shadow-sm p-4">
+            <h5 class="settings-title mb-3"> <i class="bi bi-envelope-fill me-2"></i>Email Details</h5>
+
+            <div class="mb-3">
+                <label class="form-label fw-semibold">Subject Template</label>
+                <input type="text" id="subjectTemplate" class="form-control rounded-3"
+                    placeholder="Use {company} as placeholder">
+            </div>
+
+            <div class="">
+                <label class="form-label fw-semibold">Body Template</label>
+                <textarea id="bodyTemplate" class="form-control rounded-3" rows="6"
+                    placeholder="Use {company} as placeholder"></textarea>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-12">
+        <div class="card cozy-card rounded-4 border-0 shadow-sm p-4">
+            <h5 class="settings-title mb-3"> <i class="bi bi-person-fill me-2"></i>Personal Details </h5>
+
+            <!-- Full Name -->
+            <div class="mb-3">
+                <label class="form-label fw-semibold">Full Name</label>
+                <input type="text" id="fullName" class="form-control rounded-3" placeholder="Enter your full name">
+            </div>
+
+            <!-- Company Name -->
+            <div class="mb-3">
+                <label class="form-label fw-semibold">Company Name</label>
+                <input type="text" id="myCompanyName" class="form-control rounded-3"
+                    placeholder="Enter your company name">
+            </div>
+
+            <!-- Address -->
+            <div class="mb-3">
+                <label class="form-label fw-semibold">Address</label>
+                <input type="text" id="address" class="form-control rounded-3" placeholder="Enter your address">
+            </div>
+
+            <!-- Contact -->
+            <div class="mb-3">
+                <label class="form-label fw-semibold">Contact</label>
+                <input type="text" id="contact" class="form-control rounded-3" placeholder="Enter your contact number">
+            </div>
+
+            <!-- Email -->
+            <div class="mb-3">
+                <label class="form-label fw-semibold">Email Address</label>
+                <input type="email" id="email" class="form-control rounded-3" placeholder="Enter your email">
+            </div>
+
+            <!-- Website -->
+            <div class="mb-3">
+                <label class="form-label fw-semibold">Website</label>
+                <input type="url" id="website" class="form-control rounded-3" placeholder="Enter your website URL">
+            </div>
+
+            <button id="saveWebmailBtn" class="btns btn-primary w-100">
+                <i class="bi bi-check2-circle px-1"></i> Save Webmail Templates
+            </button>
+        </div>
+    </div>
+
+    <!-- Reset All Settings Card -->
+    <div class="col-lg-12 mt-3">
+        <div class="card cozy-card rounded-4 border-0 shadow-sm p-4 text-center"
+            style="background-color: var(--bg-deep-brown);">
+            <h2 class="text-danger"><i class="bi bi-exclamation-triangle-fill me-2"></i></h2>
+            <h5 class="settings-title mb-3 text-danger fw-semibold">
+                Reset All Settings
+            </h5>
+            <p class="mb-3 small text-light">
+                This will clear all your profile information, webmail templates, personal details, and uploaded profile
+                image.
+                <br>
+                Use this only if you want to start fresh. This action <strong>cannot be undone</strong>.
+            </p>
+            <button id="resetAllBtn" class="btn btn-danger w-100">
+                <i class="bi bi-x-circle px-1"></i> Reset Everything
+            </button>
+        </div>
+    </div>
+
+</div>

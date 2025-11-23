@@ -1,0 +1,120 @@
+<style>
+    .helper-card {
+        width: auto;
+    }
+
+    /* Scrollable wrapper: horizontal + vertical scroll inside the card */
+    .excel-container {
+        width: 100%;
+        overflow-x: auto;
+        /* horizontal scroll for table */
+        overflow-y: auto;
+        /* vertical scroll if too many rows */
+        border: 1px solid #ddd;
+        border-radius: 6px;
+        background: #fff;
+        max-height: 70vh;
+    }
+
+    /* Table expands naturally inside the scrollable container */
+    .excel-table {
+        border-collapse: collapse;
+        min-width: 100%;
+        /* ensures table fills container */
+        font-family: "Segoe UI", sans-serif;
+        font-size: 14px;
+    }
+
+    .excel-table th {
+        background: #f3f3f3;
+        font-weight: 600;
+        padding: 6px 12px;
+        border: 1px solid #ccc;
+        text-align: center;
+    }
+
+    .excel-table td {
+        border: 1px solid #ccc;
+        min-width: 120px;
+        height: 32px;
+        padding: 4px 8px;
+        background: #fff;
+    }
+
+    .excel-table td:focus {
+        outline: 2px solid #4A90E2;
+        background: #eef6ff;
+    }
+</style>
+<div class="row g-2 g-md-3 helper-page">
+    <div class="col-lg-12">
+        <div class="card cozy-card rounded-4 border-0 shadow-sm p-4 helper-card">
+
+            <h5 class="settings-title mb-3">
+                <i class="bi bi-tools me-2"></i> Ez Helper
+            </h5>
+
+            <div class="d-flex mb-2">
+                <button id="undoBtn" class="btns btn-secondary btn-sm me-2">
+                    <i class="bi bi-arrow-counterclockwise me-1"></i> Undo
+                </button>
+                <button id="normalizeDataBtn" class="btns btn-secondary btn-sm me-2">
+                    <i class="bi bi-magic me-1"></i> Normalize Data
+                </button>
+                <button id="splitMultiEmailBtn" class="btns btn-secondary btn-sm me-2">
+                    <i class="bi bi-list-columns-reverse me-1"></i> Split Multi-Email
+                </button>
+                <button id="removeNaBtn" class="btns btn-secondary btn-sm me-2">
+                    <i class="bi bi-x-circle-fill me-1"></i> Remove N/A
+                </button>
+                <button id="copyABBtn" class="btns btn-secondary btn-sm me-2">
+                    <i class="bi bi-clipboard-check me-1"></i> Copy A + B
+                </button>
+                <button id="clearAllBtn" class="btn btn-danger btn-sm me-2">
+                    <i class="bi bi-trash-fill me-1"></i> Clear All
+                </button>
+            </div>
+
+
+
+            <!-- Excel-like wrapper -->
+            <div class="excel-container">
+                <table id="excelGrid" class="excel-table"></table>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="col-lg-12 mt-3">
+        <div class="card cozy-card rounded-4 border-0 shadow-sm p-4">
+            <h5 class="mb-3"><i class="bi bi-info-circle-fill me-2"></i> Button Legend</h5>
+            <div class="d-flex flex-wrap gap-3">
+                <div class="legend-item d-flex align-items-center w-100">
+                    <button class="btns btn-sm btn-primary me-2"><i class="bi bi-arrow-counterclockwise"></i></button>
+                    <span>Undo: Reverts the last change made to the table (up to 20 history states).</span>
+                </div>
+                <div class="legend-item d-flex align-items-center w-100">
+                    <button class="btns btn-sm btn-primary me-2"><i class="bi bi-magic"></i></button>
+                    <span>Normalize Data: Trims Column A and trims + lowercases Column B.</span>
+                </div>
+                <div class="legend-item d-flex align-items-center w-100">
+                    <button class="btns btn-sm btn-primary me-2"><i class="bi bi-list-columns-reverse"></i></button>
+                    <span>Split Multi-Email: Splits rows with multiple emails in Column B into separate rows.</span>
+                </div>
+                <div class="legend-item d-flex align-items-center w-100">
+                    <button class="btns btn-sm btn-primary me-2"><i class="bi bi-x-circle-fill"></i></button>
+                    <span>Remove N/A: Deletes rows where Column B is "N/A" or both Column A and B are empty.</span>
+                </div>
+                <div class="legend-item d-flex align-items-center w-100">
+                    <button class="btns btn-sm btn-primary me-2"><i class="bi bi-clipboard-check"></i></button>
+                    <span>Copy A + B: Copies Column A and B as tab-separated values to clipboard.</span>
+                </div>
+                <div class="legend-item d-flex align-items-center w-100">
+                    <button class="btns btn-sm btn-primary me-2"><i class="bi bi-trash-fill"></i></button>
+                    <span>Clear All: Clears the table and resets it to the default size (10x6).</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>

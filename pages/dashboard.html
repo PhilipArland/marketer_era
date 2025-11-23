@@ -1,0 +1,138 @@
+<style>
+    .dashboard-page {
+        .toggle-btn.active {
+            background-color: #8b7355;
+            color: white;
+        }
+
+        .report-area {
+            height: 90%;
+            max-height: 100%;
+            border-radius: .5rem;
+            border: 2px solid rgba(212, 165, 116, 0.5);
+        }
+
+        .col-md-6.right-column {
+            position: -webkit-sticky;
+            position: sticky;
+            top: 20px;
+            z-index: 10;
+            max-height: 100vh;
+        }
+
+    }
+</style>
+
+<div class="row g-2 g-md-3 dashboard-page">
+    <div class="col-lg-12">
+        <div class="d-flex justify-content-between align-items-center py-2 py-md-2 px-2">
+            <div class="text-start">
+                <h3 id="welcomeMsg" class="mb-0 fw-semibold">Welcome, User</h3>
+                <p id="paydayMsg" class="text-muted">Loading...</p>
+            </div>
+            <div class="text-end">
+                <h3 id="currentDate" class="fw-semibold mb-0"></h3>
+                <h6 id="currentTime" class="mb-0"></h6>
+            </div>
+        </div>
+
+        <div class="card cozy-card rounded-4 border-0 shadow-sm p-4">
+            <h5 class="settings-title mb-3"> <i class="bi bi-clipboard-data-fill me-2"></i>Ez Report</h5>
+            <div class="row g-4">
+                <div class="col-md-6">
+                    <div class="mb-3 d-flex justify-content-between gap-2">
+                        <div class="report w-100 d-flex gap-3">
+                            <button id="btnCollection" class="btns btn-primary toggle-btn w-50">Collection</button>
+                            <button id="btnEmails" class="btns btn-primary toggle-btn w-50">Emails</button>
+                            <button id="btnWebmails" class="btns btn-primary toggle-btn w-50">Webmails</button>
+                            <button id="resetBtn" class="btn btn-danger w-50">
+                                <i class="bi bi-arrow-clockwise"></i> Reset
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- COLLECTION -->
+                    <div id="collectionSection">
+                        <h5 class="mb-3">Company Collection</h5>
+
+                        <!-- Country/State toggle -->
+                        <div class="input-group mb-2">
+                            <button class="btns btn-primary toggle-collection me-1" id="toggleColLocation"
+                                type="button">
+                                <i class="bi bi-arrow-repeat"></i>
+                            </button>
+                            <input type="text" id="colLocation" class="form-control">
+                        </div>
+
+                        <input type="text" id="colMarket" class="form-control mb-2" placeholder="Market Segment">
+                        <input type="number" id="colCompanyCount" class="form-control mb-2"
+                            placeholder="No. of Collected Company Names">
+                        <input type="number" id="colEmailCount" class="form-control mb-2"
+                            placeholder="No. of Collected Company Emails">
+                        <hr>
+                    </div>
+
+                    <!-- EMAILS -->
+                    <div id="emailsSection" style="display:none;">
+                        <h5 class="mb-3">Sending Emails</h5>
+
+                        <div class="input-group mb-2">
+                            <button class="btns btn-primary toggle-collection me-1" id="toggleEmailLocation"
+                                type="button">
+                                <i class="bi bi-arrow-repeat"></i>
+                            </button>
+                            <input type="text" id="emailLocation" class="form-control">
+                        </div>
+
+                        <input type="text" id="emailMarket" class="form-control mb-2" placeholder="Market Segment">
+                        <input type="text" id="emailProductLine" class="form-control mb-2" placeholder="Product Line">
+                        <input type="number" id="emailCount" class="form-control mb-2" placeholder="No. of Send Emails">
+                        <hr>
+                    </div>
+
+                    <!-- WEBMAILS -->
+                    <div id="webmailsSection" style="display:none;">
+                        <h5 class="mb-3">Sending Webmails</h5>
+
+                        <div class="input-group mb-2">
+                            <button class="btns btn-primary toggle-collection me-1" id="toggleWebmailLocation"
+                                type="button">
+                                <i class="bi bi-arrow-repeat"></i>
+                            </button>
+                            <input type="text" id="webmailLocation" class="form-control">
+                        </div>
+
+                        <input type="text" id="webmailMarket" class="form-control mb-2" placeholder="Market Segment">
+                        <input type="text" id="webmailProductLine" class="form-control mb-2" placeholder="Product Line">
+                        <input type="number" id="webmailCount" class="form-control mb-2"
+                            placeholder="No. of Sent Webmails">
+                        <hr>
+                    </div>
+
+                    <!-- RESPONSES -->
+                    <div id="responseSection">
+                        <h5 class="mb-3">Responses</h5>
+                        <input type="number" id="emailsReceived" class="form-control mb-2"
+                            placeholder="Emails Received">
+                        <input type="number" id="notInterested" class="form-control mb-2" placeholder="Not Interested">
+                    </div>
+                </div>
+
+                <!-- RIGHT COLUMN -->
+                <div class="col-md-6 right-column mb-5 pb-2">
+                    <div class="d-flex align-items-center justify-content-between mb-2">
+                        <h5 class="mb-2">Generated Report</h5>
+                        <button id="copyReportBtn" class="btns btn-primary">
+                            <i class="bi bi-clipboard"></i> Copy Report
+                        </button>
+                    </div>
+                    <textarea id="dailyReport" class="form-control report-area mb-2" readonly></textarea>
+                    <button id="copyReportBtn2" class="btns btn-primary w-100">
+                        <i class="bi bi-clipboard"></i> Copy Report
+                    </button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
