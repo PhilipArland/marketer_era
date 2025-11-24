@@ -15,10 +15,18 @@ document.addEventListener("DOMContentLoaded", function () {
 
                 window.scrollTo(0, 0);
 
+                // Change background if page is "hidden"
+                if (page === 'hidden') {
+                    document.body.style.backgroundColor = '#2B2420';
+                } else {
+                    document.body.style.backgroundColor = ''; // reset to default
+                }
+
                 handlePageInit(page);
             })
             .catch(err => console.error('Error loading page:', err));
     }
+
 
     // ==============================
     // HELPER: LOAD HTML INTO ELEMENT

@@ -6,6 +6,7 @@
 
     --bg-deep-brown: #3B2F2A;
     --bg-soft-brown: #8b7355;
+    --dark-body: #2b2a28;
 
     --text-primary: #4a3f35;
     --text-secondary: #7a6b57;
@@ -21,7 +22,6 @@
 }
 
 body.dark-mode {
-    --bg-body: #2b2a28;
     --bg-warm-cream: #4a3f35;
     --bg-cozy-orange: #b87c4a;
     --bg-cozy-green: #38d48b;
