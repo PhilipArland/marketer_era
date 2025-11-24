@@ -1,0 +1,77 @@
+<style>
+    .kb-btn {
+        background: var(--bg-soft-brown);
+        border: 2px solid #c9c9c9;
+        border-bottom: 6px solid #b1b1b1;
+        /* 3D depth */
+        border-right: 4px solid #bfbfbf;
+        color: var(--text-active);
+        font-weight: 700;
+        font-size: 1.5rem;
+        border-radius: 10px;
+        box-shadow: 0 4px 0 #b1b1b1, 0 6px 12px rgba(0, 0, 0, 0.15);
+        transition: all 0.1s ease;
+        user-select: none;
+    }
+
+    .kb-btn:hover {
+        background: var(--bg-deep-brown);
+        cursor: pointer;
+    }
+
+    .kb-btn:active {
+        transform: translateY(3px);
+        box-shadow: 0 1px 0 #9a9a9a, 0 3px 8px rgba(0, 0, 0, 0.15);
+        border-bottom-width: 3px;
+    }
+</style>
+
+<div class="row g-2 g-md-3 email-page">
+    <div class="col-lg-12">
+        <div class="card cozy-card rounded-4 border-0 shadow-sm p-4">
+
+            <h5 class="settings-title mb-3">
+                <i class="bi bi-inbox-fill me-2"></i> Ez Email
+            </h5>
+
+            <div class="row">
+
+                <!-- LEFT COLUMN : BIG ADD BUTTON -->
+                <div class="col-md-4 d-flex flex-column justify-content-center align-items-center p-md-3">
+
+                    <button id="addEmailBtn" class="kb-btn w-100 py-4 rounded-4 mb-3 fw-bold h-100"
+                        style="font-size: 1.4rem;">
+                        + Add 50 Emails
+                    </button>
+
+                </div>
+
+                <!-- RIGHT COLUMN : REPORT BOX -->
+                <div class="col-md-8">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <h6 class="fw-bold">Report</h6>
+
+                        <div class="d-flex">
+                            <button id="undoEmailReportBtn" class="btns btn-primary me-2">
+                                <i class="bi bi-arrow-counterclockwise"></i> Undo
+                            </button>
+
+                            <button id="clearEmailReportBtn" class="btn btn-sm btn-danger me-2">
+                                <i class="bi bi-trash"></i> Clear
+                            </button>
+                        </div>
+
+                    </div>
+
+                    <textarea id="emailReportOutput" class="form-control mb-3" rows="6" readonly></textarea>
+
+                    <button id="copyEmailReportBtn" class="btns btn-primary w-100">
+                        <i class="bi bi-clipboard"></i> Copy
+                    </button>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</div>

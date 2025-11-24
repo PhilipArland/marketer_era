@@ -47,6 +47,7 @@ document.addEventListener("DOMContentLoaded", function () {
         switch (page) {
             case 'dashboard': initDashboardPage(); break;
             case 'collection': initCollectionPage(); break;
+            case 'email': initEmailPage(); break;
             case 'webmails': initWebmailsPage(); break;
             case 'helper': initHelperPage(); break;
             case 'settings': initSettingsPage(); break;
