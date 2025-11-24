@@ -11,7 +11,7 @@ function initHelperPage() {
     console.log("Initializing helper.js");
 
     const table = document.getElementById("excelGrid");
-    const defaultColumns = 6;
+    const defaultColumns = 5;
     const defaultRows = 10;
 
     // Load saved table
@@ -148,61 +148,6 @@ function initHelperPage() {
 
             localStorage.setItem("helperTableData", JSON.stringify(prevState));
             console.log("Undo applied");
-        });
-    }
-
-    const splitBtn = document.getElementById("splitMultiEmailBtn");
-    if (splitBtn) {
-        splitBtn.addEventListener("click", () => {
-            saveTableToLocalStorage(); // save current state for Undo
-
-            const table = document.getElementById("excelGrid");
-            const newRows = [];
-
-            // Iterate rows (skip header)
-            for (let r = 1; r < table.rows.length; r++) {
-                const companyCell = table.rows[r].cells[0];
-                const emailCell = table.rows[r].cells[1];
-
-                if (!companyCell || !emailCell) continue;
-
-                const emails = emailCell.innerText.split(/\r?\n/).map(e => e.trim()).filter(e => e !== "");
-
-                if (emails.length <= 1) continue; // skip rows with 1 or 0 emails
-
-                emails.forEach(email => {
-                    newRows.push([
-                        companyCell.innerText,  // col 0
-                        email,                  // col 1
-                        table.rows[r].cells[2]?.innerText || "", // col 2
-                        table.rows[r].cells[3]?.innerText || "", // col 3
-                        table.rows[r].cells[4]?.innerText || "", // col 4
-                        table.rows[r].cells[5]?.innerText || ""  // col 5
-                    ]);
-                });
-
-                // Mark original row for deletion
-                table.rows[r].dataset.delete = "true";
-            }
-
-            // Delete original multi-email rows
-            for (let r = table.rows.length - 1; r > 0; r--) {
-                if (table.rows[r].dataset.delete === "true") table.deleteRow(r);
-            }
-
-            // Append new rows
-            newRows.forEach(rowData => {
-                const row = table.insertRow();
-                rowData.forEach(cellData => {
-                    const td = document.createElement("td");
-                    td.contentEditable = "true";
-                    td.innerText = cellData;
-                    row.appendChild(td);
-                });
-            });
-
-            saveTableToLocalStorage(false); // save changes, don’t push new history
-            console.log(`Split ${newRows.length} emails into separate rows`);
         });
     }
 
