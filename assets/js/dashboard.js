@@ -1,130 +1,20 @@
 function initDashboardPage() {
     console.log("Initializing dashboard.js");
 
-    const username = localStorage.getItem('username') || 'User'; // Default to 'User' if not set
-    const welcomeMsg = document.getElementById("welcomeMsg");
-    welcomeMsg.textContent = `Welcome, ${username}`;
-
-    // 2. Date and Time Update
-    const currentDate = document.getElementById("currentDate");
-    const currentTime = document.getElementById("currentTime");
-
-    function updateDateTime() {
-        const now = new Date();
-
-        // Format date: November 20, 2025
-        const dateOptions = { year: 'numeric', month: 'long', day: 'numeric' };
-        currentDate.textContent = now.toLocaleDateString('en-US', dateOptions);
-
-        // Format time: 11:00:45 pm
-        let hours = now.getHours();
-        const minutes = String(now.getMinutes()).padStart(2, '0');
-        const seconds = String(now.getSeconds()).padStart(2, '0');
-        const ampm = hours >= 12 ? 'PM' : 'AM';
-        hours = hours % 12;
-        hours = hours ? hours : 12; // hour '0' should be '12'
-        currentTime.textContent = `${hours}:${minutes}:${seconds} ${ampm}`;
-    }
-
-    // Initial call to updateDateTime
-    updateDateTime();
-    // Update time every second
-    setInterval(updateDateTime, 1000);
-
-    // 3. Payday Calculation (same logic from your previous code)
-    const holidays = [
-        // Regular Holidays
-        new Date(2025, 0, 1),    // Jan 1 — New Year’s Day
-        new Date(2025, 3, 9),    // Apr 9 — Araw ng Kagitingan
-        new Date(2025, 3, 17),   // Apr 17 — Maundy Thursday
-        new Date(2025, 3, 18),   // Apr 18 — Good Friday
-        new Date(2025, 4, 1),    // May 1 — Labor Day
-        new Date(2025, 5, 12),   // Jun 12 — Independence Day
-        new Date(2025, 7, 25),   // Aug 25 — National Heroes Day (last Monday of Aug)
-        new Date(2025, 10, 30),  // Nov 30 — Bonifacio Day
-        new Date(2025, 11, 25),  // Dec 25 — Christmas Day
-        new Date(2025, 11, 30),  // Dec 30 — Rizal Day
-        // Special (Non-Working) Days
-        new Date(2025, 0, 29),   // Jan 29 — Chinese New Year
-        new Date(2025, 3, 19),   // Apr 19 — Black Saturday
-        new Date(2025, 7, 21),   // Aug 21 — Ninoy Aquino Day
-        new Date(2025, 9, 31),   // Oct 31 — All Saints’ Day Eve
-        new Date(2025, 10, 1),   // Nov 1 — All Saints’ Day
-        new Date(2025, 11, 8),   // Dec 8 — Feast of the Immaculate Conception
-        new Date(2025, 11, 24),  // Dec 24 — Christmas Eve
-        new Date(2025, 11, 31),  // Dec 31 — Last Day of the Year
-    ];
-
-    function isWorkingDay(date) {
-        const day = date.getDay();
-        // Weekend or holiday
-        return day !== 0 && day !== 6 && !holidays.some(h =>
-            h.getFullYear() === date.getFullYear() &&
-            h.getMonth() === date.getMonth() &&
-            h.getDate() === date.getDate()
-        );
-    }
-
-    function adjustToWorkingDay(date) {
-        let adjusted = new Date(date);
-        while (!isWorkingDay(adjusted)) {
-            adjusted.setDate(adjusted.getDate() - 1);
-        }
-        return adjusted;
-    }
-
-    function nextPayday(today = new Date()) {
-        const year = today.getFullYear();
-        const month = today.getMonth();
-        const fifteenth = new Date(year, month, 15);
-        const lastDay = new Date(year, month + 1, 0);
-
-        let payday = today <= fifteenth ? fifteenth : lastDay;
-        // Adjust if payday falls on weekend or holiday
-        return adjustToWorkingDay(payday);
-    }
-
-    function workingDaysBetween(start, end) {
-        let count = 0;
-        let current = new Date(start);
-        while (current < end) {
-            if (isWorkingDay(current)) count++;
-            current.setDate(current.getDate() + 1);
-        }
-        return count;
-    }
-
-    function formatDate(date) {
-        return date.toLocaleDateString('en-US', {
-            month: 'long',
-            day: 'numeric'
-        });
-    }
-
-    // Calculate payday and remaining working days
-    const today = new Date();
-    const payday = nextPayday(today);
-    const workdaysLeft = workingDaysBetween(today, payday);
-
-    const paydayMsg = document.getElementById("paydayMsg");
-    if (workdaysLeft === 0) {
-        paydayMsg.textContent = `Today is payday! (${formatDate(payday)})`;
-    } else {
-        paydayMsg.textContent = `Goal: ${formatDate(payday)} | ${workdaysLeft} working day${workdaysLeft !== 1 ? "s" : ""} left before payday!`;
-    }
-
-    // 1. Get references to sections, buttons, and the report textarea
+    // ---------------------------------------
+    // 1. BASIC PAGE REFERENCES
+    // ---------------------------------------
     const collectionSection = document.getElementById('collectionSection');
     const emailsSection = document.getElementById('emailsSection');
     const webmailsSection = document.getElementById('webmailsSection');
-
     const btnCollection = document.getElementById('btnCollection');
     const btnEmails = document.getElementById('btnEmails');
     const btnWebmails = document.getElementById('btnWebmails');
-
     const dailyReport = document.getElementById("dailyReport");
 
-    // 2. Load saved section visibility from localStorage
+    // ---------------------------------------
+    // 2. RESTORE VISIBILITY
+    // ---------------------------------------
     const secCol = localStorage.getItem("section_collection") || "show";
     const secEmails = localStorage.getItem("section_emails") || "hide";
     const secWebmails = localStorage.getItem("section_webmails") || "hide";
@@ -133,20 +23,137 @@ function initDashboardPage() {
     emailsSection.style.display = secEmails === "show" ? "block" : "none";
     webmailsSection.style.display = secWebmails === "show" ? "block" : "none";
 
-    // Toggle buttons' active state
     if (secCol === "show") btnCollection.classList.add("active");
     if (secEmails === "show") btnEmails.classList.add("active");
     if (secWebmails === "show") btnWebmails.classList.add("active");
 
-    // 3. Load saved input values from localStorage into the input fields
-    document.querySelectorAll("input").forEach(input => {
-        const savedValue = localStorage.getItem(input.id);
-        if (savedValue) {
-            input.value = savedValue;
+    // -------------------------------------------------------------------
+    // 3. DYNAMIC COLLECTION SETS — COMPLETE FIXED VERSION
+    // -------------------------------------------------------------------
+
+    let setCount = Number(localStorage.getItem("setCount")) || 1;
+    const collectionSetsContainer = document.getElementById("collectionSetsContainer");
+    const addCollectionSetBtn = document.getElementById("addCollectionSetBtn");
+
+    // Create a dynamic collection set (new or restore)
+    function createCollectionSet(id, restore = false) {
+        const newSet = document.createElement("div");
+        newSet.classList.add("collection-set");
+        newSet.id = `set-${id}`;
+
+        newSet.innerHTML = `
+            <div class="d-flex justify-content-between align-items-center">
+                <h5 class="mb-3">Company Collection</h5>
+                <button class="btn btn-outline-dark btn-sm remove-set" data-set-id="${id}">×</button>
+            </div>
+
+            <div class="input-group mb-2">
+                <button class="btns btn-primary toggle-collection me-1" id="toggleColLocation-${id}" type="button">
+                    <i class="bi bi-arrow-repeat"></i>
+                </button>
+                <input type="text" id="colLocation-${id}" class="form-control colLocation" placeholder="Location">
+            </div>
+
+            <input type="text" id="colMarket-${id}" class="form-control mb-2 colMarket" placeholder="Market Segment">
+            <input type="number" id="colCompanyCount-${id}" class="form-control mb-2 colCompanyCount" placeholder="No. of Collected Company Names">
+            <input type="number" id="colEmailCount-${id}" class="form-control mb-2 colEmailCount" placeholder="No. of Collected Company Emails">
+            <hr>
+        `;
+
+        collectionSetsContainer.appendChild(newSet);
+
+        // Remove button
+        newSet.querySelector('.remove-set').addEventListener('click', (e) => {
+            const setId = parseInt(e.target.dataset.setId);
+
+            // Remove from DOM
+            const setElement = document.getElementById(`set-${setId}`);
+            if (setElement) setElement.remove();
+
+            // Remove related localStorage entries
+            ['colLocation', 'colMarket', 'colCompanyCount', 'colEmailCount', `colMode-${setId}`].forEach(key => {
+                localStorage.removeItem(`${key}-${setId}`);
+            });
+
+            // Update activeSets in localStorage
+            let activeSets = JSON.parse(localStorage.getItem("activeSets")) || [];
+            const idx = activeSets.indexOf(setId);
+            if (idx > -1) activeSets.splice(idx, 1);
+            localStorage.setItem("activeSets", JSON.stringify(activeSets));
+
+            // Regenerate the report
+            generateReport();
+        });
+
+
+
+        // Restore inputs
+        if (restore) {
+            ["colLocation", "colMarket", "colCompanyCount", "colEmailCount"].forEach(k => {
+                const v = localStorage.getItem(`${k}-${id}`);
+                if (v) document.getElementById(`${k}-${id}`).value = v;
+            });
         }
+
+        // Restore or apply mode
+        const savedMode = localStorage.getItem(`colMode-${id}`) || "country";
+        const locationInput = document.getElementById(`colLocation-${id}`);
+        locationInput.dataset.mode = savedMode;
+        applyMode(savedMode, `colLocation-${id}`);
+
+        // Mode toggle button
+        document.getElementById(`toggleColLocation-${id}`).addEventListener("click", () => {
+            const inp = document.getElementById(`colLocation-${id}`);
+            const newMode = inp.dataset.mode === "country" ? "state" : "country";
+            inp.dataset.mode = newMode;
+            localStorage.setItem(`colMode-${id}`, newMode);
+            applyMode(newMode, `colLocation-${id}`);
+            generateReport();
+        });
+
+        // Auto-save inputs
+        newSet.querySelectorAll("input").forEach(input => {
+            input.addEventListener("input", () => {
+                localStorage.setItem(input.id, input.value);
+                generateReport();
+            });
+        });
+
+        // Remove set
+        newSet.querySelector(".remove-set").addEventListener("click", () => {
+            ["colLocation", "colMarket", "colCompanyCount", "colEmailCount"].forEach(k => {
+                localStorage.removeItem(`${k}-${id}`);
+            });
+            localStorage.removeItem(`colMode-${id}`);
+            newSet.remove();
+            generateReport();
+        });
+    }
+
+    // Restore all saved sets except the original one
+    let activeSets = JSON.parse(localStorage.getItem("activeSets")) || [];
+    for (let i of activeSets) {
+        createCollectionSet(i, true);
+    }
+
+    // Add new set
+    addCollectionSetBtn.addEventListener("click", () => {
+        createCollectionSet(setCount);
+
+        // Update activeSets
+        let activeSets = JSON.parse(localStorage.getItem("activeSets")) || [];
+        activeSets.push(setCount);
+        localStorage.setItem("activeSets", JSON.stringify(activeSets));
+
+        setCount++;
+        localStorage.setItem("setCount", setCount);
+        generateReport();
     });
 
-    // 4. Toggle visibility for Collection Section
+
+    // -------------------------------------------------------------------
+    // 4. TOGGLE SECTION VISIBILITY
+    // -------------------------------------------------------------------
     btnCollection.addEventListener('click', () => {
         const show = collectionSection.style.display === "none";
         collectionSection.style.display = show ? "block" : "none";
@@ -155,7 +162,6 @@ function initDashboardPage() {
         generateReport();
     });
 
-    // 5. Toggle visibility for Emails Section
     btnEmails.addEventListener('click', () => {
         const show = emailsSection.style.display === "none";
         emailsSection.style.display = show ? "block" : "none";
@@ -164,7 +170,6 @@ function initDashboardPage() {
         generateReport();
     });
 
-    // 6. Toggle visibility for Webmails Section
     btnWebmails.addEventListener('click', () => {
         const show = webmailsSection.style.display === "none";
         webmailsSection.style.display = show ? "block" : "none";
@@ -173,22 +178,21 @@ function initDashboardPage() {
         generateReport();
     });
 
-    // 7. Define toggle button elements for Country/State switch
+    // -------------------------------------------------------------------
+    // 5. ORIGINAL TOGGLE BUTTONS (MAIN COLLECTION / EMAIL / WEBMAIL)
+    // -------------------------------------------------------------------
     const toggleColLocation = document.getElementById("toggleColLocation");
     const toggleEmailLocation = document.getElementById("toggleEmailLocation");
     const toggleWebmailLocation = document.getElementById("toggleWebmailLocation");
 
-    // 8. Load saved modes from localStorage
     let colMode = localStorage.getItem("colMode") || "country";
     let emailMode = localStorage.getItem("emailMode") || "country";
     let webmailMode = localStorage.getItem("webmailMode") || "country";
 
-    // Apply the initial modes
     applyMode(colMode, "colLocation");
     applyMode(emailMode, "emailLocation");
     applyMode(webmailMode, "webmailLocation");
 
-    // 9. Add event listeners to toggle buttons for Country/State
     toggleColLocation.addEventListener('click', () => {
         colMode = toggleMode(colMode);
         localStorage.setItem("colMode", colMode);
@@ -210,188 +214,166 @@ function initDashboardPage() {
         generateReport();
     });
 
-    // Helper function to toggle between "country" and "state"
     function toggleMode(currentMode) {
         return currentMode === "country" ? "state" : "country";
     }
 
-    // Helper function to apply the correct mode (Country/State) and label
     function applyMode(mode, inputId) {
         const input = document.getElementById(inputId);
+        if (!input) return;
         input.placeholder = mode === "country"
-            ? `Country (Click "🔁" to toggle between Country and State)`
-            : `State (Click "🔁" to toggle between Country and State)`;
-        input.dataset.mode = mode; // Store the mode in data attribute for reference
+            ? `Country (Click "🔁" to toggle)`
+            : `State (Click "🔁" to toggle)`;
+        input.dataset.mode = mode;
     }
 
-    // Helper function to format the location label based on input
-    function formatLocationLabel(locationInputValue, mode) {
-        const locations = locationInputValue.split(/,| and /i).map(s => s.trim()).filter(Boolean); // Split by commas and "and"
-        const locationCount = locations.length;
-
-        // If the input is empty, return the basic label
-        if (locationCount === 0) {
+    // -------------------------------------------------------------------
+    // 6. FORMAT LOCATION LABEL
+    // -------------------------------------------------------------------
+    function formatLocationLabel(value, mode) {
+        if (!value || value.trim() === "") {
             return mode === "country" ? "Country:" : "State:";
         }
 
-        let label = "";
-        if (locationCount === 1) {
-            label = mode === "country" ? "Country" : "State";
-        } else {
-            label = mode === "country" ? "Countries" : "States";
-        }
+        const locations = value.split(/,| and /i).map(s => s.trim()).filter(Boolean);
+        const count = locations.length;
 
-        // Format list for 2 or more locations
-        let formattedLocations = "";
-        if (locationCount === 1) {
-            formattedLocations = locations[0];
-        } else if (locationCount === 2) {
-            formattedLocations = `${locations[0]} and ${locations[1]}`;
-        } else {
-            const lastLocation = locations.pop();
-            formattedLocations = `${locations.join(", ")}, and ${lastLocation}`;
-        }
+        if (count === 0) return mode === "country" ? "Country:" : "State:";
 
-        return `${label}: ${formattedLocations}`;
+        const label = (count === 1)
+            ? (mode === "country" ? "Country" : "State")
+            : (mode === "country" ? "Countries" : "States");
+
+        if (count === 1) return `${label}: ${locations[0]}`;
+        if (count === 2) return `${label}: ${locations[0]} and ${locations[1]}`;
+
+        const last = locations.pop();
+        return `${label}: ${locations.join(", ")}, and ${last}`;
     }
 
-    // 10. Generate the report based on the input values
+    // -------------------------------------------------------------------
+    // 7. GENERATE REPORT
+    // -------------------------------------------------------------------
     function generateReport() {
         const now = new Date();
-        // Determine if it's before 1:00 PM (13:00 in 24-hour format)
         const isMidDay = now.getHours() < 13;
+        const dateString = now.toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" });
+        const reportDateHeader = isMidDay ? `${dateString} (Mid-Day Report)` : dateString;
 
-        // Format the base date string
-        const dateString = now.toLocaleDateString("en-US", {
-            year: "numeric",
-            month: "long",
-            day: "numeric"
-        });
-
-        // Append the Mid-Day Report tag if required
-        const reportDateHeader = isMidDay
-            ? `${dateString} (Mid-Day Report)`
-            : dateString;
-
-
-        // -----------------------------
-        // 1. Collect Values for Report
-        // -----------------------------
+        // MAIN COLLECTION
         let collectionText = "";
         if (collectionSection.style.display !== "none") {
             const colLocation = document.getElementById("colLocation").value;
             const colMarket = document.getElementById("colMarket").value;
             const colCompanyCount = document.getElementById("colCompanyCount").value;
             const colEmailCount = document.getElementById("colEmailCount").value;
-            const colMode = document.getElementById("colLocation").dataset.mode; // Retrieve the mode
+            const mode = document.getElementById("colLocation").dataset.mode;
 
-            // Get the collection location label
-            const collectionLocationLabel = formatLocationLabel(colLocation, colMode);
+            const locLabel = formatLocationLabel(colLocation, mode);
 
-            collectionText =
-                `COMPANY NAME COLLECTION
-${collectionLocationLabel}
+            collectionText = `
+COMPANY NAME COLLECTION
+${locLabel}
 Market Segment: ${colMarket}
 No. of Collected Company Names: ${colCompanyCount}
 No. of Collected Company Emails: ${colEmailCount}`;
         }
 
+        // DYNAMIC COLLECTION SETS
+        document.querySelectorAll(".collection-set").forEach(set => {
+            const loc = set.querySelector(".colLocation").value;
+            const market = set.querySelector(".colMarket").value;
+            const companyCount = set.querySelector(".colCompanyCount").value;
+            const emailCount = set.querySelector(".colEmailCount").value;
+            const mode = set.querySelector(".colLocation").dataset.mode;
+
+            const locLabel = formatLocationLabel(loc, mode);
+
+            collectionText += `
+
+COMPANY NAME COLLECTION
+${locLabel}
+Market Segment: ${market}
+No. of Collected Company Names: ${companyCount}
+No. of Collected Company Emails: ${emailCount}`;
+        });
+
+        // EMAIL SECTION
         let emailText = "";
         if (emailsSection.style.display !== "none") {
             const emailLocation = document.getElementById("emailLocation").value;
             const emailMarket = document.getElementById("emailMarket").value;
             const emailProductLine = document.getElementById("emailProductLine").value;
             const emailCount = document.getElementById("emailCount").value;
-            const emailMode = document.getElementById("emailLocation").dataset.mode; // Retrieve the mode
+            const emailMode = document.getElementById("emailLocation").dataset.mode;
 
-            // Get the email location label
-            const emailLocationLabel = formatLocationLabel(emailLocation, emailMode);
+            const emailLocLabel = formatLocationLabel(emailLocation, emailMode);
 
-            emailText =
-                `SENDING EMAILS
-${emailLocationLabel}
+            emailText = `SENDING EMAILS:
+${emailLocLabel}
 Market Segment: ${emailMarket}
 Product Line: ${emailProductLine}
 No. of Sent Emails: ${emailCount}`;
         }
 
+        // WEBMAIL SECTION
         let webmailText = "";
         if (webmailsSection.style.display !== "none") {
             const webmailLocation = document.getElementById("webmailLocation").value;
             const webmailMarket = document.getElementById("webmailMarket").value;
             const webmailProductLine = document.getElementById("webmailProductLine").value;
             const webmailCount = document.getElementById("webmailCount").value;
-            const webmailMode = document.getElementById("webmailLocation").dataset.mode; // Retrieve the mode
+            const webmailMode = document.getElementById("webmailLocation").dataset.mode;
 
-            // Get the webmail location label
-            const webmailLocationLabel = formatLocationLabel(webmailLocation, webmailMode);
+            const webmailLocLabel = formatLocationLabel(webmailLocation, webmailMode);
 
-            webmailText =
-                `SENDING WEBMAILS
-${webmailLocationLabel}
+            webmailText = `SENDING WEBMAILS:
+${webmailLocLabel}
 Market Segment: ${webmailMarket}
 Product Line: ${webmailProductLine}
 No. of Sent Webmails: ${webmailCount}`;
         }
 
-        let responseText = "";
-        // Note: responseSection is not toggled, so we assume it's always available
+        // RESPONSE SECTION
         const emailsReceived = document.getElementById("emailsReceived").value || "0";
         const notInterested = document.getElementById("notInterested").value || "0";
-        responseText =
-            `Emails Received: ${emailsReceived}
+
+        const responseText = `Emails Received: ${emailsReceived}
 Not Interested: ${notInterested}`;
 
-
-        // -----------------------------
-        // 2. Assemble the Report Content
-        // -----------------------------
+        // FINAL REPORT
         const sections = [];
         if (collectionText) sections.push(collectionText);
         if (emailText) sections.push(emailText);
         if (webmailText) sections.push(webmailText);
-        if (responseText) sections.push(responseText);
+        sections.push(responseText);
 
         const reportBody = sections.join("\n\n");
+        const username = localStorage.getItem("username") || "User";
 
-        // -----------------------------
-        // 3. Final Report Template
-        // -----------------------------
-        const username = localStorage.getItem('username') || 'User';
-        const fullReport = `
-${reportDateHeader}
-
+        const fullReport = `${reportDateHeader}
 ${reportBody}
-
 Thank you.
 
-- ${username}`.trim();
+- ${username}`;
 
-        // Set the report to the textarea
         dailyReport.value = fullReport;
-
-        // Save the report in localStorage
         localStorage.setItem("generatedReport", fullReport);
     }
 
-    // 11. Load the report from localStorage (if available)
+    // Restore saved report
     const savedReport = localStorage.getItem("generatedReport");
-    if (savedReport) {
-        dailyReport.value = savedReport;
-    }
+    if (savedReport) dailyReport.value = savedReport;
 
-    // 12. Auto Update the Report on Input Change
+    // GLOBAL input listener
     document.querySelectorAll("input").forEach(input => {
         input.addEventListener("input", () => {
-            // Save input values in localStorage
             localStorage.setItem(input.id, input.value);
-
-            // Regenerate the report
             generateReport();
         });
     });
 
-    // 13. Copy Report Button Functionality
+    // Copy buttons
     const copyReportBtn = document.getElementById("copyReportBtn");
     copyReportBtn.addEventListener('click', () => {
         navigator.clipboard.writeText(dailyReport.value);
@@ -410,34 +392,43 @@ Thank you.
         }, 1500);
     });
 
+    // RESET BUTTON
     const resetBtn = document.getElementById("resetBtn");
     if (resetBtn) {
-        resetBtn.addEventListener('click', () => {
-            // Clear all input fields
-            document.querySelectorAll("input").forEach(input => {
-                input.value = "";
-                // Clear corresponding localStorage items for inputs
-                localStorage.removeItem(input.id);
+        resetBtn.addEventListener("click", () => {
+            document.querySelectorAll("input").forEach(inp => {
+                localStorage.removeItem(inp.id);
+                inp.value = "";
             });
 
-            // Clear the generated report
-            dailyReport.value = "";
-            localStorage.removeItem("generatedReport");
+            // Remove dynamic sets storage
+            for (let i = 1; i < setCount; i++) {
+                ["colLocation", "colMarket", "colCompanyCount", "colEmailCount"].forEach(k => {
+                    localStorage.removeItem(`${k}-${i}`);
+                });
+                localStorage.removeItem(`colMode-${i}`);
+            }
+            localStorage.removeItem("setCount");
+            setCount = 1;
+            collectionSetsContainer.innerHTML = "";
 
-            // Reset location modes to default ("country") and re-apply placeholders
+            // Reset defaults
             localStorage.setItem("colMode", "country");
             localStorage.setItem("emailMode", "country");
             localStorage.setItem("webmailMode", "country");
+
             applyMode("country", "colLocation");
             applyMode("country", "emailLocation");
             applyMode("country", "webmailLocation");
 
-            // Force a report regeneration (which will now be mostly empty)
-            generateReport();
+            localStorage.removeItem("generatedReport");
+            dailyReport.value = "";
+
             console.log("All input fields and local storage data have been reset.");
+            generateReport();
         });
     }
 
-    // Call to generate report after page load
+    // Generate first time
     generateReport();
 }

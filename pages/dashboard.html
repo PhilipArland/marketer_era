@@ -19,7 +19,6 @@
             z-index: 10;
             max-height: 100vh;
         }
-
     }
 </style>
 
@@ -53,7 +52,12 @@
 
                     <!-- COLLECTION -->
                     <div id="collectionSection">
-                        <h5 class="mb-3">Company Collection</h5>
+                        <div class="d-flex align-items-center justify-content-between">
+                            <h5 class="mb-3">Company Collection</h5>
+                            <button id="addCollectionSetBtn" class="btn btn-outline-dark btn-sm">
+                                <i class="bi bi-plus"></i>
+                            </button>
+                        </div>
 
                         <!-- Country/State toggle -->
                         <div class="input-group mb-2">
@@ -70,6 +74,10 @@
                         <input type="number" id="colEmailCount" class="form-control mb-2"
                             placeholder="No. of Collected Company Emails">
                         <hr>
+
+                        <div id="collectionSetsContainer">
+                            <!-- New sets will be appended here -->
+                        </div>
                     </div>
 
                     <!-- EMAILS -->
