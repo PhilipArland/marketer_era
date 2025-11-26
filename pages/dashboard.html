@@ -82,8 +82,14 @@
 
                     <!-- EMAILS -->
                     <div id="emailsSection" style="display:none;">
-                        <h5 class="mb-3">Sending Emails</h5>
+                        <div class="d-flex align-items-center justify-content-between">
+                            <h5 class="mb-3">Sending Emails</h5>
+                            <button id="addEmailSetBtn" class="btn btn-outline-dark btn-sm">
+                                <i class="bi bi-plus"></i>
+                            </button>
+                        </div>
 
+                        <!-- Default email inputs -->
                         <div class="input-group mb-2">
                             <button class="btns btn-primary toggle-collection me-1" id="toggleEmailLocation"
                                 type="button">
@@ -91,17 +97,27 @@
                             </button>
                             <input type="text" id="emailLocation" class="form-control">
                         </div>
-
                         <input type="text" id="emailMarket" class="form-control mb-2" placeholder="Market Segment">
                         <input type="text" id="emailProductLine" class="form-control mb-2" placeholder="Product Line">
-                        <input type="number" id="emailCount" class="form-control mb-2" placeholder="No. of Send Emails">
+                        <input type="number" id="emailCount" class="form-control mb-2" placeholder="No. of Sent Emails">
                         <hr>
+
+                        <div id="emailSetsContainer">
+                            <!-- New email sets will be appended here -->
+                        </div>
                     </div>
+
 
                     <!-- WEBMAILS -->
                     <div id="webmailsSection" style="display:none;">
-                        <h5 class="mb-3">Sending Webmails</h5>
+                        <div class="d-flex align-items-center justify-content-between">
+                            <h5 class="mb-3">Sending Webmails</h5>
+                            <button id="addWebmailSetBtn" class="btn btn-outline-dark btn-sm">
+                                <i class="bi bi-plus"></i>
+                            </button>
+                        </div>
 
+                        <!-- Default webmail inputs -->
                         <div class="input-group mb-2">
                             <button class="btns btn-primary toggle-collection me-1" id="toggleWebmailLocation"
                                 type="button">
@@ -109,13 +125,17 @@
                             </button>
                             <input type="text" id="webmailLocation" class="form-control">
                         </div>
-
                         <input type="text" id="webmailMarket" class="form-control mb-2" placeholder="Market Segment">
                         <input type="text" id="webmailProductLine" class="form-control mb-2" placeholder="Product Line">
                         <input type="number" id="webmailCount" class="form-control mb-2"
                             placeholder="No. of Sent Webmails">
                         <hr>
+
+                        <div id="webmailSetsContainer">
+                            <!-- New webmail sets will be appended here -->
+                        </div>
                     </div>
+
 
                     <!-- RESPONSES -->
                     <div id="responseSection">
