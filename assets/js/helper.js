@@ -105,19 +105,27 @@ function initHelperPage() {
                 const cellB = table.rows[r].cells[1];
 
                 const valA = cellA ? cellA.innerText.trim() : "";
-                const valB = cellB ? cellB.innerText.trim() : "";
+                const valB = cellB ? cellB.innerText.trim().toLowerCase() : ""; // Normalize the email to lowercase
 
-                if (valB.toUpperCase() === "N/A" || (valA === "" && valB === "")) {
+                // Remove rows if:
+                // 1. Email is empty
+                // 2. Email is exactly "n/a", "na" or any form of it (case insensitive)
+                // 3. Both company and email are empty
+                if (
+                    valB === "" ||                           // If email is empty
+                    valB === "n/a" ||                        // If email is "N/A", "n/a", "N/a", etc.
+                    valB === "na" ||                         // If email is "na"
+                    (valA === "" && valB === "")             // If both company and email are empty
+                ) {
                     table.deleteRow(r);
                     rowsDeleted++;
                 }
             }
 
             saveTableToLocalStorage(false); // save changes without pushing extra history
-            console.log(`Removed ${rowsDeleted} rows (N/A or blank)`);
+            console.log(`Removed ${rowsDeleted} rows (N/A or blank).`);
         });
     }
-
 
     // --------------------
     // Undo button
@@ -151,116 +159,196 @@ function initHelperPage() {
         });
     }
 
+    // Normalize Data Button
     const normalizeBtn = document.getElementById("normalizeDataBtn");
     if (normalizeBtn) {
         normalizeBtn.addEventListener("click", () => {
             saveTableToLocalStorage(); // save current state for Undo
 
+            console.log("Normalizing data...");
             const table = document.getElementById("excelGrid");
             let changed = 0;
             const totalRows = table.rows.length;
 
-            for (let r = 1; r < totalRows; r++) { // skip header (r=1)
+            for (let r = 1; r < totalRows; r++) { // skip header
                 const row = table.rows[r];
                 let rowChanged = false;
 
-                // --- Column A (index 0): Trim only ---
+                // --- Column A: Trim only ---
                 const cellA = row.cells[0];
                 if (cellA && cellA.innerText.trim() !== "") {
                     const originalA = cellA.innerText;
                     const trimmedA = originalA.trim();
-
                     if (originalA !== trimmedA) {
                         cellA.innerText = trimmedA;
                         rowChanged = true;
                     }
                 }
 
-                // --- Column B (index 1): Trim AND Lowercase ---
+                // --- Column B: Clean + trim + lowercase + remove internal spaces ---
                 const cellB = row.cells[1];
                 if (cellB && cellB.innerText.trim() !== "") {
                     const originalB = cellB.innerText;
-                    // Trim first, then lowercase
-                    const normalizedB = originalB.trim().toLowerCase();
 
-                    if (originalB !== normalizedB) {
-                        cellB.innerText = normalizedB;
+                    // Clean email: trim, lowercase, and remove internal spaces
+                    const cleanedB = originalB
+                        .trim()                               // Trim leading/trailing spaces
+                        .toLowerCase()                       // Convert to lowercase
+                        .replace(/\s+/g, '');                // Remove internal spaces (inside the email)
+
+                    if (originalB !== cleanedB) {
+                        cellB.innerText = cleanedB;
                         rowChanged = true;
                     }
                 }
 
-                if (rowChanged) {
-                    changed++;
-                }
+                if (rowChanged) changed++;
             }
 
             if (changed > 0) {
-                saveTableToLocalStorage(false); // save new state but don't push another history
-                console.log(`Normalized data in ${changed} rows (Trimmed Col A, Trimmed & Lowercased Col B).`);
+                saveTableToLocalStorage(false);
+                console.log(`Normalized data in ${changed} rows (Trimmed Col A + cleaned emails in Col B).`);
             } else {
                 console.log("No data to normalize.");
             }
         });
     }
 
+    // Split Email Rows Button
     const splitEmailRowsBtn = document.getElementById("splitEmailRowsBtn");
-if (splitEmailRowsBtn) {
-    splitEmailRowsBtn.addEventListener("click", () => {
-        saveTableToLocalStorage(); // save for Undo
+    if (splitEmailRowsBtn) {
+        splitEmailRowsBtn.addEventListener("click", () => {
+            saveTableToLocalStorage(); // save for Undo
 
-        const table = document.getElementById("excelGrid");
-        const rows = [...table.rows]; // snapshot
+            const table = document.getElementById("excelGrid");
+            const rows = [...table.rows]; // snapshot
 
-        let newRowsAdded = 0;
+            let newRowsAdded = 0;
 
-        for (let r = rows.length - 1; r > 0; r--) { // from bottom up
-            const row = rows[r];
-            const company = row.cells[0]?.innerText.trim() || "";
-            const rawEmail = row.cells[1]?.innerText || "";
+            for (let r = rows.length - 1; r > 0; r--) { // from bottom up
+                const row = rows[r];
+                const company = row.cells[0]?.innerText.trim() || "";
+                let rawEmail = row.cells[1]?.innerText || "";
 
-            // UNIVERSAL SPLIT:
-            let parts = rawEmail
-                .replace(/\r/g, "")                // remove Windows returns
-                .replace(/"/g, "")                // remove quotes
-                .split(/[\n,;]+|\sand\s/gi)       // split by newline, comma, semicolon, "and"
-                .map(s => s.trim())
-                .filter(s => s.length > 0);       // remove empty entries
+                // Check if the raw email contains spaces and we need to deal with them carefully
+                let parts = rawEmail
+                    .replace(/\r/g, "")                // remove Windows returns
+                    .replace(/"/g, "")                // remove quotes
+                    .split(/[\n,;]+|\sand\s/gi)       // split by newline, comma, semicolon, "and"
+                    .map(s => s.trim())
+                    .filter(s => s.length > 0);       // remove empty entries
 
-            if (parts.length <= 1) continue; // nothing to split
-
-            // Remove original row
-            table.deleteRow(r);
-
-            // Insert new rows for each email
-            parts.forEach(email => {
-                const newRow = table.insertRow(r);
-
-                // Col A
-                let cellA = newRow.insertCell(0);
-                cellA.contentEditable = "true";
-                cellA.innerText = company;
-
-                // Col B
-                let cellB = newRow.insertCell(1);
-                cellB.contentEditable = "true";
-                cellB.innerText = email;
-
-                // Fill remaining columns
-                const colCount = rows[0].cells.length;
-                for (let c = 2; c < colCount; c++) {
-                    let emptyCell = newRow.insertCell(c);
-                    emptyCell.contentEditable = "true";
-                    emptyCell.innerText = "";
+                // If the row contains only one value and it looks like an email
+                if (parts.length === 1 && parts[0].includes("@")) {
+                    // If it contains just one valid email with no spaces
+                    parts = [rawEmail];  // Keep it as a single part (don't split)
                 }
 
-                newRowsAdded++;
-            });
+                // If there's no real split and it's just one part (company and email combined)
+                if (parts.length === 1 && parts[0].includes("@") && company && rawEmail.indexOf(company) !== -1) {
+                    // Combine company and email if email is found within the same field as company
+                    parts = [company + rawEmail.split(company)[1].trim()];
+                }
+
+                if (parts.length <= 1) continue; // nothing to split, skip this row
+
+                // Remove the original row
+                table.deleteRow(r);
+
+                // Insert new rows for each email address
+                parts.forEach(email => {
+                    // Split by space only if it's clearly a wrong email (company + email)
+                    let emailParts = email.split(/\s+/);  // Split only on spaces
+                    let finalCompany = company;
+                    let finalEmail = email;
+
+                    // If the email was wrongly split by space (like "company 44@gmail.com")
+                    if (emailParts.length > 1) {
+                        finalCompany = emailParts[0];  // The first part is the company
+                        finalEmail = emailParts.slice(1).join(" ");  // Join the remaining parts as the email
+                    }
+
+                    const newRow = table.insertRow(r);
+
+                    // Col A
+                    let cellA = newRow.insertCell(0);
+                    cellA.contentEditable = "true";
+                    cellA.innerText = finalCompany;
+
+                    // Col B
+                    let cellB = newRow.insertCell(1);
+                    cellB.contentEditable = "true";
+                    cellB.innerText = finalEmail;
+
+                    // Fill remaining columns
+                    const colCount = rows[0].cells.length;
+                    for (let c = 2; c < colCount; c++) {
+                        let emptyCell = newRow.insertCell(c);
+                        emptyCell.contentEditable = "true";
+                        emptyCell.innerText = "";
+                    }
+
+                    newRowsAdded++;
+                });
+            }
+
+            console.log(`Split into ${newRowsAdded} rows.`);
+            saveTableToLocalStorage(false);
+
+            // Apply normalization after splitting
+            normalizeData();  // Call normalizeData manually to clean up any split rows
+        });
+    }
+
+
+    // Normalization Logic (called after splitting)
+    function normalizeData() {
+        const table = document.getElementById("excelGrid");
+        let changed = 0;
+        const totalRows = table.rows.length;
+
+        for (let r = 1; r < totalRows; r++) { // skip header
+            const row = table.rows[r];
+            let rowChanged = false;
+
+            // --- Column A: Trim only ---
+            const cellA = row.cells[0];
+            if (cellA && cellA.innerText.trim() !== "") {
+                const originalA = cellA.innerText;
+                const trimmedA = originalA.trim();
+                if (originalA !== trimmedA) {
+                    cellA.innerText = trimmedA;
+                    rowChanged = true;
+                }
+            }
+
+            // --- Column B: Clean + trim + lowercase + remove internal spaces ---
+            const cellB = row.cells[1];
+            if (cellB && cellB.innerText.trim() !== "") {
+                const originalB = cellB.innerText;
+
+                // Clean email: trim, lowercase, and remove internal spaces
+                const cleanedB = originalB
+                    .trim()                               // Trim leading/trailing spaces
+                    .toLowerCase()                       // Convert to lowercase
+                    .replace(/\s+/g, '');                // Remove internal spaces (inside the email)
+
+                if (originalB !== cleanedB) {
+                    cellB.innerText = cleanedB;
+                    rowChanged = true;
+                }
+            }
+
+            if (rowChanged) changed++;
         }
 
-        console.log(`Split into ${newRowsAdded} rows.`);
-        saveTableToLocalStorage(false);
-    });
-}
+        if (changed > 0) {
+            console.log(`Normalized data in ${changed} rows (Trimmed Col A + cleaned emails in Col B).`);
+        } else {
+            console.log("No data to normalize.");
+        }
+    }
+
 
 
     const copyABBtn = document.getElementById("copyABBtn");
