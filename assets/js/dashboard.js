@@ -1,118 +1,6 @@
 function initDashboardPage() {
     console.log("Initializing dashboard.js");
 
-    const username = localStorage.getItem('username') || 'User'; // Default to 'User' if not set
-    const welcomeMsg = document.getElementById("welcomeMsg");
-    welcomeMsg.textContent = `Welcome, ${username}`;
-
-    // 2. Date and Time Update
-    const currentDate = document.getElementById("currentDate");
-    const currentTime = document.getElementById("currentTime");
-
-    function updateDateTime() {
-        const now = new Date();
-
-        // Format date: November 20, 2025
-        const dateOptions = { year: 'numeric', month: 'long', day: 'numeric' };
-        currentDate.textContent = now.toLocaleDateString('en-US', dateOptions);
-
-        // Format time: 11:00:45 pm
-        let hours = now.getHours();
-        const minutes = String(now.getMinutes()).padStart(2, '0');
-        const seconds = String(now.getSeconds()).padStart(2, '0');
-        const ampm = hours >= 12 ? 'PM' : 'AM';
-        hours = hours % 12;
-        hours = hours ? hours : 12; // hour '0' should be '12'
-        currentTime.textContent = `${hours}:${minutes}:${seconds} ${ampm}`;
-    }
-
-    // Initial call to updateDateTime
-    updateDateTime();
-    // Update time every second
-    setInterval(updateDateTime, 1000);
-
-    // 3. Payday Calculation (same logic from your previous code)
-    const holidays = [
-        // Regular Holidays
-        new Date(2025, 0, 1),    // Jan 1 — New Year’s Day
-        new Date(2025, 3, 9),    // Apr 9 — Araw ng Kagitingan
-        new Date(2025, 3, 17),   // Apr 17 — Maundy Thursday
-        new Date(2025, 3, 18),   // Apr 18 — Good Friday
-        new Date(2025, 4, 1),    // May 1 — Labor Day
-        new Date(2025, 5, 12),   // Jun 12 — Independence Day
-        new Date(2025, 7, 25),   // Aug 25 — National Heroes Day (last Monday of Aug)
-        new Date(2025, 10, 30),  // Nov 30 — Bonifacio Day
-        new Date(2025, 11, 25),  // Dec 25 — Christmas Day
-        new Date(2025, 11, 30),  // Dec 30 — Rizal Day
-        // Special (Non-Working) Days
-        new Date(2025, 0, 29),   // Jan 29 — Chinese New Year
-        new Date(2025, 3, 19),   // Apr 19 — Black Saturday
-        new Date(2025, 7, 21),   // Aug 21 — Ninoy Aquino Day
-        new Date(2025, 9, 31),   // Oct 31 — All Saints’ Day Eve
-        new Date(2025, 10, 1),   // Nov 1 — All Saints’ Day
-        new Date(2025, 11, 8),   // Dec 8 — Feast of the Immaculate Conception
-        new Date(2025, 11, 24),  // Dec 24 — Christmas Eve
-        new Date(2025, 11, 31),  // Dec 31 — Last Day of the Year
-    ];
-
-    function isWorkingDay(date) {
-        const day = date.getDay();
-        // Weekend or holiday
-        return day !== 0 && day !== 6 && !holidays.some(h =>
-            h.getFullYear() === date.getFullYear() &&
-            h.getMonth() === date.getMonth() &&
-            h.getDate() === date.getDate()
-        );
-    }
-
-    function adjustToWorkingDay(date) {
-        let adjusted = new Date(date);
-        while (!isWorkingDay(adjusted)) {
-            adjusted.setDate(adjusted.getDate() - 1);
-        }
-        return adjusted;
-    }
-
-    function nextPayday(today = new Date()) {
-        const year = today.getFullYear();
-        const month = today.getMonth();
-        const fifteenth = new Date(year, month, 15);
-        const lastDay = new Date(year, month + 1, 0);
-
-        let payday = today <= fifteenth ? fifteenth : lastDay;
-        // Adjust if payday falls on weekend or holiday
-        return adjustToWorkingDay(payday);
-    }
-
-    function workingDaysBetween(start, end) {
-        let count = 0;
-        let current = new Date(start);
-        while (current < end) {
-            if (isWorkingDay(current)) count++;
-            current.setDate(current.getDate() + 1);
-        }
-        return count;
-    }
-
-    function formatDate(date) {
-        return date.toLocaleDateString('en-US', {
-            month: 'long',
-            day: 'numeric'
-        });
-    }
-
-    // Calculate payday and remaining working days
-    const today = new Date();
-    const payday = nextPayday(today);
-    const workdaysLeft = workingDaysBetween(today, payday);
-
-    const paydayMsg = document.getElementById("paydayMsg");
-    if (workdaysLeft === 0) {
-        paydayMsg.textContent = `Today is payday! (${formatDate(payday)})`;
-    } else {
-        paydayMsg.textContent = `Goal: ${formatDate(payday)} | ${workdaysLeft} working day${workdaysLeft !== 1 ? "s" : ""} left before payday!`;
-    }
-
     // ---------------------------------------
     // 1. BASIC PAGE REFERENCES
     // ---------------------------------------
@@ -154,7 +42,7 @@ function initDashboardPage() {
         newSet.innerHTML = `
             <div class="d-flex justify-content-between align-items-center">
                 <h5 class="mb-3">Company Collection</h5>
-                <button class="btn btn-outline-dark btn-sm remove-set" data-set-id="${id}">×</button>
+                <button class="btn btn-danger btn-sm remove-set" data-set-id="${id}">×</button>
             </div>
 
             <div class="input-group mb-2">
@@ -255,7 +143,7 @@ function initDashboardPage() {
         newSet.innerHTML = `
         <div class="d-flex justify-content-between align-items-center">
             <h5 class="mb-3">Email Sending</h5>
-            <button class="btn btn-outline-dark btn-sm remove-email-set" data-set-id="${id}">×</button>
+            <button class="btn btn-danger btn-sm remove-email-set" data-set-id="${id}">×</button>
         </div>
 
         <div class="input-group mb-2">
@@ -357,7 +245,7 @@ function initDashboardPage() {
         newSet.innerHTML = `
     <div class="d-flex justify-content-between align-items-center">
         <h5 class="mb-3">Webmail Sending</h5>
-        <button class="btn btn-outline-dark btn-sm remove-webmail-set" data-set-id="${id}">×</button>
+        <button class="btn btn-danger btn-sm remove-webmail-set" data-set-id="${id}">×</button>
     </div>
 
     <div class="input-group mb-2">
@@ -541,7 +429,9 @@ function initDashboardPage() {
         const dateString = now.toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" });
         const reportDateHeader = isMidDay ? `${dateString} (Mid-Day Report)` : dateString;
 
-        // ORIGINAL COLLECTION INPUTS
+        // ===============================
+        // COLLECTION SECTION
+        // ===============================
         let collectionText = "";
         if (collectionSection.style.display !== "none") {
             const colLocation = document.getElementById("colLocation").value;
@@ -551,8 +441,8 @@ function initDashboardPage() {
             const mode = document.getElementById("colLocation").dataset.mode;
             const locLabel = formatLocationLabel(colLocation, mode);
 
-            collectionText = `
-COMPANY NAME COLLECTION
+            collectionText +=
+                `COMPANY NAME COLLECTION
 ${locLabel}
 Market Segment: ${colMarket}
 No. of Collected Company Names: ${colCompanyCount}
@@ -560,24 +450,27 @@ No. of Collected Company Emails: ${colEmailCount}`;
         }
 
         // DYNAMIC COLLECTION SETS
-        document.querySelectorAll(".collection-set").forEach(set => {
-            const loc = set.querySelector(".colLocation").value;
-            const market = set.querySelector(".colMarket").value;
-            const companyCount = set.querySelector(".colCompanyCount").value;
-            const emailCount = set.querySelector(".colEmailCount").value;
-            const mode = set.querySelector(".colLocation").dataset.mode;
-            const locLabel = formatLocationLabel(loc, mode);
+        if (collectionSection.style.display !== "none") {
+            document.querySelectorAll(".collection-set").forEach(set => {
+                const loc = set.querySelector(".colLocation").value;
+                const market = set.querySelector(".colMarket").value;
+                const companyCount = set.querySelector(".colCompanyCount").value;
+                const emailCount = set.querySelector(".colEmailCount").value;
+                const mode = set.querySelector(".colLocation").dataset.mode;
+                const locLabel = formatLocationLabel(loc, mode);
 
-            collectionText += `
-
-COMPANY NAME COLLECTION
+                collectionText +=
+                    `\n\nCOMPANY NAME COLLECTION
 ${locLabel}
 Market Segment: ${market}
 No. of Collected Company Names: ${companyCount}
 No. of Collected Company Emails: ${emailCount}`;
-        });
+            });
+        }
 
+        // ===============================
         // EMAIL SECTION
+        // ===============================
         let emailText = "";
         if (emailsSection.style.display !== "none") {
             const emailLocation = document.getElementById("emailLocation").value;
@@ -587,7 +480,8 @@ No. of Collected Company Emails: ${emailCount}`;
             const emailMode = document.getElementById("emailLocation").dataset.mode;
             const emailLocLabel = formatLocationLabel(emailLocation, emailMode);
 
-            emailText = `SENDING EMAILS:
+            emailText +=
+                `SENDING EMAILS:
 ${emailLocLabel}
 Market Segment: ${emailMarket}
 Product Line: ${emailProductLine}
@@ -595,27 +489,29 @@ No. of Sent Emails: ${emailCount}`;
         }
 
         // DYNAMIC EMAIL SETS
-        document.querySelectorAll(".email-set").forEach(set => {
-            const emailLoc = set.querySelector(".emailLocation").value;
-            const emailMarket = set.querySelector(".emailMarket").value;
-            const emailProductLine = set.querySelector(".emailProductLine").value;
-            const emailCount = set.querySelector(".emailCount").value;
-            const mode = set.querySelector(".emailLocation").dataset.mode;
-            const emailLocLabel = formatLocationLabel(emailLoc, mode);
+        if (emailsSection.style.display !== "none") {
+            document.querySelectorAll(".email-set").forEach(set => {
+                const emailLoc = set.querySelector(".emailLocation").value;
+                const emailMarket = set.querySelector(".emailMarket").value;
+                const emailProductLine = set.querySelector(".emailProductLine").value;
+                const emailCount = set.querySelector(".emailCount").value;
+                const mode = set.querySelector(".emailLocation").dataset.mode;
+                const emailLocLabel = formatLocationLabel(emailLoc, mode);
 
-            emailText += `\n
-SENDING EMAILS:
+                emailText +=
+                    `\n\nSENDING EMAILS:
 ${emailLocLabel}
 Market Segment: ${emailMarket}
 Product Line: ${emailProductLine}
 No. of Sent Emails: ${emailCount}`;
-        });
+            });
+        }
 
-
+        // ===============================
         // WEBMAIL SECTION
+        // ===============================
         let webmailText = "";
         if (webmailsSection.style.display !== "none") {
-            // Default webmail inputs
             const webmailLocation = document.getElementById("webmailLocation").value;
             const webmailMarket = document.getElementById("webmailMarket").value;
             const webmailProductLine = document.getElementById("webmailProductLine").value;
@@ -623,7 +519,8 @@ No. of Sent Emails: ${emailCount}`;
             const webmailMode = document.getElementById("webmailLocation").dataset.mode;
             const webmailLocLabel = formatLocationLabel(webmailLocation, webmailMode);
 
-            webmailText = `SENDING WEBMAILS:
+            webmailText +=
+                `SENDING WEBMAILS:
 ${webmailLocLabel}
 Market Segment: ${webmailMarket}
 Product Line: ${webmailProductLine}
@@ -631,31 +528,37 @@ No. of Sent Webmails: ${webmailCount}`;
         }
 
         // DYNAMIC WEBMAIL SETS
-        document.querySelectorAll(".webmail-set").forEach(set => {
-            const webmailLoc = set.querySelector(".webmailLocation").value;
-            const webmailMarket = set.querySelector(".webmailMarket").value;
-            const webmailProductLine = set.querySelector(".webmailProductLine").value;
-            const webmailCount = set.querySelector(".webmailCount").value;
-            const mode = set.querySelector(".webmailLocation").dataset.mode;
-            const webmailLocLabel = formatLocationLabel(webmailLoc, mode);
+        if (webmailsSection.style.display !== "none") {
+            document.querySelectorAll(".webmail-set").forEach(set => {
+                const webmailLoc = set.querySelector(".webmailLocation").value;
+                const webmailMarket = set.querySelector(".webmailMarket").value;
+                const webmailProductLine = set.querySelector(".webmailProductLine").value;
+                const webmailCount = set.querySelector(".webmailCount").value;
+                const mode = set.querySelector(".webmailLocation").dataset.mode;
+                const webmailLocLabel = formatLocationLabel(webmailLoc, mode);
 
-            webmailText += `\n
-SENDING WEBMAILS:
+                webmailText +=
+                    `\n\nSENDING WEBMAILS:
 ${webmailLocLabel}
 Market Segment: ${webmailMarket}
 Product Line: ${webmailProductLine}
 No. of Sent Webmails: ${webmailCount}`;
-        });
+            });
+        }
 
-
+        // ===============================
         // RESPONSE SECTION
+        // ===============================
         const emailsReceived = document.getElementById("emailsReceived").value || "0";
         const notInterested = document.getElementById("notInterested").value || "0";
 
-        const responseText = `Emails Received: ${emailsReceived}
+        const responseText =
+            `Emails Received: ${emailsReceived}
 Not Interested: ${notInterested}`;
 
-        // FINAL REPORT
+        // ===============================
+        // FINAL ASSEMBLY
+        // ===============================
         const sections = [];
         if (collectionText) sections.push(collectionText);
         if (emailText) sections.push(emailText);
@@ -665,8 +568,11 @@ Not Interested: ${notInterested}`;
         const reportBody = sections.join("\n\n");
         const username = localStorage.getItem("username") || "User";
 
-        const fullReport = `${reportDateHeader}
+        const fullReport =
+            `${reportDateHeader}
+
 ${reportBody}
+
 Thank you.
 
 - ${username}`;
@@ -679,13 +585,27 @@ Thank you.
     const savedReport = localStorage.getItem("generatedReport");
     if (savedReport) dailyReport.value = savedReport;
 
-    // GLOBAL input listener
-    document.querySelectorAll("input").forEach(input => {
-        input.addEventListener("input", () => {
-            localStorage.setItem(input.id, input.value);
+    // SAVE ORIGINAL INPUTS
+    [
+        "colLocation", "colMarket", "colCompanyCount", "colEmailCount",
+        "emailLocation", "emailMarket", "emailProductLine", "emailCount",
+        "webmailLocation", "webmailMarket", "webmailProductLine", "webmailCount",
+        "emailsReceived", "notInterested"
+    ].forEach(id => {
+        const el = document.getElementById(id);
+        if (!el) return;
+
+        // Restore previous value
+        const saved = localStorage.getItem(id);
+        if (saved !== null) el.value = saved;
+
+        // Save when typing
+        el.addEventListener("input", () => {
+            localStorage.setItem(id, el.value);
             generateReport();
         });
     });
+
 
     // Copy buttons
     const copyReportBtn = document.getElementById("copyReportBtn");
