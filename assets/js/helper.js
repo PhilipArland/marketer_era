@@ -203,6 +203,66 @@ function initHelperPage() {
         });
     }
 
+    const splitEmailRowsBtn = document.getElementById("splitEmailRowsBtn");
+if (splitEmailRowsBtn) {
+    splitEmailRowsBtn.addEventListener("click", () => {
+        saveTableToLocalStorage(); // save for Undo
+
+        const table = document.getElementById("excelGrid");
+        const rows = [...table.rows]; // snapshot
+
+        let newRowsAdded = 0;
+
+        for (let r = rows.length - 1; r > 0; r--) { // from bottom up
+            const row = rows[r];
+            const company = row.cells[0]?.innerText.trim() || "";
+            const rawEmail = row.cells[1]?.innerText || "";
+
+            // UNIVERSAL SPLIT:
+            let parts = rawEmail
+                .replace(/\r/g, "")                // remove Windows returns
+                .replace(/"/g, "")                // remove quotes
+                .split(/[\n,;]+|\sand\s/gi)       // split by newline, comma, semicolon, "and"
+                .map(s => s.trim())
+                .filter(s => s.length > 0);       // remove empty entries
+
+            if (parts.length <= 1) continue; // nothing to split
+
+            // Remove original row
+            table.deleteRow(r);
+
+            // Insert new rows for each email
+            parts.forEach(email => {
+                const newRow = table.insertRow(r);
+
+                // Col A
+                let cellA = newRow.insertCell(0);
+                cellA.contentEditable = "true";
+                cellA.innerText = company;
+
+                // Col B
+                let cellB = newRow.insertCell(1);
+                cellB.contentEditable = "true";
+                cellB.innerText = email;
+
+                // Fill remaining columns
+                const colCount = rows[0].cells.length;
+                for (let c = 2; c < colCount; c++) {
+                    let emptyCell = newRow.insertCell(c);
+                    emptyCell.contentEditable = "true";
+                    emptyCell.innerText = "";
+                }
+
+                newRowsAdded++;
+            });
+        }
+
+        console.log(`Split into ${newRowsAdded} rows.`);
+        saveTableToLocalStorage(false);
+    });
+}
+
+
     const copyABBtn = document.getElementById("copyABBtn");
     if (copyABBtn && !copyABBtn.dataset.listenerAttached) {
         copyABBtn.addEventListener("click", () => {
