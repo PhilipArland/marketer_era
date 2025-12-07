@@ -55,11 +55,10 @@
         /* Initially hidden */
         margin-top: 20px;
         background-color: #34495e;
-        padding: 10px;
+        padding: 1.3rem;
         border-radius: 10px;
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
         width: 100%;
-        max-width: 360px;
         margin: 0 auto;
     }
 
@@ -134,6 +133,118 @@
         background-color: #e74c3c;
         transform: translateY(1px);
     }
+
+    /* 2048 Game Styles */
+    #game2048Board {
+        display: grid;
+        grid-template-columns: repeat(4, 80px);
+        gap: 10px;
+        justify-content: center;
+        background: #bbada0;
+        padding: 10px;
+        border-radius: 10px;
+        margin: 0 auto;
+    }
+
+    .cell-2048 {
+        width: 80px;
+        height: 80px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 2rem;
+        font-weight: bold;
+        border-radius: 8px;
+        background: rgba(238, 228, 218, 0.35);
+        transition: all 0.15s ease-in-out;
+    }
+
+    /* Tile colors */
+    .tile-2 {
+        background: #eee4da;
+        color: #776e65;
+    }
+
+    .tile-4 {
+        background: #ede0c8;
+        color: #776e65;
+    }
+
+    .tile-8 {
+        background: #f2b179;
+        color: #f9f6f2;
+    }
+
+    .tile-16 {
+        background: #f59563;
+        color: #f9f6f2;
+    }
+
+    .tile-32 {
+        background: #f67c5f;
+        color: #f9f6f2;
+    }
+
+    .tile-64 {
+        background: #f65e3b;
+        color: #f9f6f2;
+    }
+
+    .tile-128 {
+        background: #edcf72;
+        color: #f9f6f2;
+        font-size: 1.7rem;
+    }
+
+    .tile-256 {
+        background: #edcc61;
+        color: #f9f6f2;
+        font-size: 1.7rem;
+    }
+
+    .tile-512 {
+        background: #edc850;
+        color: #f9f6f2;
+        font-size: 1.7rem;
+    }
+
+    .tile-1024 {
+        background: #edc53f;
+        color: #f9f6f2;
+        font-size: 1.5rem;
+    }
+
+    .tile-2048 {
+        background: #edc22e;
+        color: #f9f6f2;
+        font-size: 1.5rem;
+    }
+
+    .tile-4096 {
+        background: #3c3a32;
+        color: #f9f6f2;
+        font-size: 1.5rem;
+    }
+
+    /* Responsive design */
+    @media (max-width: 576px) {
+        #game2048Board {
+            grid-template-columns: repeat(4, 60px);
+        }
+
+        .cell-2048 {
+            width: 60px;
+            height: 60px;
+            font-size: 1.5rem;
+        }
+    }
+
+    #highScore2048 {
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: #ecf0f1;
+        transition: color 0.3s ease;
+    }
 </style>
 
 
@@ -191,15 +302,44 @@
         </div>
     </div>
 
-    <button class="btn btn-transparent" id="toggleMinesweeperBtn"><i class="bi bi-dash"></i></button>
-    <!-- Minesweeper Game -->
+    <!-- Toggle Mini-Games Menu -->
+    <button class="btn btn-transparent" id="toggleMiniGamesBtn">
+        <i class="bi bi-dash"></i>
+    </button>
+
+    <!-- Mini-Games Buttons (Initially Hidden) -->
+    <div id="miniGamesMenu" style="display: none; margin-top: 10px; gap: 10px;">
+        <button id="openMinesweeperBtn" class="btns btn-primary w-100">Minesweeper</button>
+        <button id="open2048Btn" class="btn btn-success w-100">2048</button>
+        <button class="btn btn-secondary w-100" disabled>Coming Soon</button>
+    </div>
+
+    <!-- Minesweeper Game Card -->
     <div class="card bg-transparent border-0">
-        <div class="col-lg-12 py-5 rounded-4" style="background-color: #34495e;">
-            <div id="minesweeper">
+        <!-- <div class="col-lg-12 py-5 rounded-4" style="background-color: #34495e;"> -->
+        <div class="col-lg-12 py-5 rounded-4">
+            <div id="minesweeper" style="display: none;">
                 <div id="gameMessage" class="text-center text-light mb-3">Welcome to Minesweeper!</div>
                 <div id="game-board"></div>
-                <button id="resetMinesweeperBtn" class="btn btn-danger w-100 mt-3">Reset Game</button>
+                <div class="d-flex align-items-center justify-content-center">
+                    <button id="resetMinesweeperBtn" class="btn btn-danger w-25 mt-3">Reset Game</button>
+                </div>
+            </div>
+
+            <div id="2048Card" class="card bg-transparent border-0" style="display: none;">
+                <div class="col-lg-12 py-5 rounded-4" style="background-color: #34495e;">
+                    <div id="game2048Message" class="text-center text-light mb-3">Use Arrow Keys or W/A/S/D</div>
+                    <div id="game2048Board"></div>
+                    <div class="d-flex align-items-center justify-content-center">
+                        <button id="reset2048Btn" class="btn btn-danger w-25 mt-3">Reset Game</button>
+                    </div>
+                    <div id="highScore2048" class="text-center text-light mt-3"
+                        style="font-size: 1.1rem; font-weight: 600;">
+                        High Score: 0
+                    </div>
+                </div>
             </div>
         </div>
     </div>
+
 </div>
