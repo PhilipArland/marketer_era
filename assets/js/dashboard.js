@@ -33,26 +33,28 @@ function initDashboardPage() {
 
     // 3. Payday Calculation (same logic from your previous code)
     const holidays = [
-        // Regular Holidays
-        new Date(2025, 0, 1),    // Jan 1 — New Year’s Day
-        new Date(2025, 3, 9),    // Apr 9 — Araw ng Kagitingan
-        new Date(2025, 3, 17),   // Apr 17 — Maundy Thursday
-        new Date(2025, 3, 18),   // Apr 18 — Good Friday
-        new Date(2025, 4, 1),    // May 1 — Labor Day
-        new Date(2025, 5, 12),   // Jun 12 — Independence Day
-        new Date(2025, 7, 25),   // Aug 25 — National Heroes Day (last Monday of Aug)
-        new Date(2025, 10, 30),  // Nov 30 — Bonifacio Day
-        new Date(2025, 11, 25),  // Dec 25 — Christmas Day
-        new Date(2025, 11, 30),  // Dec 30 — Rizal Day
-        // Special (Non-Working) Days
-        new Date(2025, 0, 29),   // Jan 29 — Chinese New Year
-        new Date(2025, 3, 19),   // Apr 19 — Black Saturday
-        new Date(2025, 7, 21),   // Aug 21 — Ninoy Aquino Day
-        new Date(2025, 9, 31),   // Oct 31 — All Saints’ Day Eve
-        new Date(2025, 10, 1),   // Nov 1 — All Saints’ Day
-        new Date(2025, 11, 8),   // Dec 8 — Feast of the Immaculate Conception
-        new Date(2025, 11, 24),  // Dec 24 — Christmas Eve
-        new Date(2025, 11, 31),  // Dec 31 — Last Day of the Year
+        // Regular Holidays (Fixed dates)
+        new Date(new Date().getFullYear(), 0, 1),    // Jan 1 — New Year’s Day
+        new Date(new Date().getFullYear(), 3, 9),    // Apr 9 — Araw ng Kagitingan
+        new Date(new Date().getFullYear(), 2, 28),   // Mar 28 — Maundy Thursday
+        new Date(new Date().getFullYear(), 2, 29),   // Mar 29 — Good Friday
+        new Date(new Date().getFullYear(), 4, 1),    // May 1 — Labor Day
+        new Date(new Date().getFullYear(), 5, 12),   // Jun 12 — Independence Day
+        new Date(new Date().getFullYear(), 7, 26),   // Aug 26 — National Heroes Day
+        new Date(new Date().getFullYear(), 10, 30),  // Nov 30 — Bonifacio Day
+        new Date(new Date().getFullYear(), 11, 25),  // Dec 25 — Christmas Day
+        new Date(new Date().getFullYear(), 11, 30),  // Dec 30 — Rizal Day
+
+        // Special (Non-Working) Holidays
+        new Date(new Date().getFullYear(), 1, 10),   // Feb 10 — Chinese New Year
+        new Date(new Date().getFullYear(), 1, 9),    // Feb 9 — Additional Special (Non-Working) Day
+        new Date(new Date().getFullYear(), 2, 30),   // Mar 30 — Black Saturday
+        new Date(new Date().getFullYear(), 7, 21),   // Aug 21 — Ninoy Aquino Day
+        new Date(new Date().getFullYear(), 10, 1),   // Nov 1 — All Saints’ Day
+        new Date(new Date().getFullYear(), 10, 2),   // Nov 2 — Additional special (Non-working) Day
+        new Date(new Date().getFullYear(), 11, 8),   // Dec 8 — Feast of the Immaculate Conception
+        new Date(new Date().getFullYear(), 11, 24),  // Dec 24 — Christmas Eve
+        new Date(new Date().getFullYear(), 11, 31),  // Dec 31 — Last Day of the Year
     ];
 
     function isWorkingDay(date) {
