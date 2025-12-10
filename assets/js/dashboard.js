@@ -593,7 +593,7 @@ No. of Collected Company Emails: ${emailCount}`;
             const emailLocLabel = formatLocationLabel(emailLocation, emailMode);
 
             emailText +=
-                `SENDING EMAILS:
+                `SENDING EMAILS
 ${emailLocLabel}
 Market Segment: ${emailMarket}
 Product Line: ${emailProductLine}
@@ -611,7 +611,7 @@ No. of Sent Emails: ${emailCount}`;
                 const emailLocLabel = formatLocationLabel(emailLoc, mode);
 
                 emailText +=
-                    `\n\nSENDING EMAILS:
+                    `\n\nSENDING EMAILS
 ${emailLocLabel}
 Market Segment: ${emailMarket}
 Product Line: ${emailProductLine}
@@ -632,7 +632,7 @@ No. of Sent Emails: ${emailCount}`;
             const webmailLocLabel = formatLocationLabel(webmailLocation, webmailMode);
 
             webmailText +=
-                `SENDING WEBMAILS:
+                `SENDING WEBMAILS
 ${webmailLocLabel}
 Market Segment: ${webmailMarket}
 Product Line: ${webmailProductLine}
@@ -650,7 +650,7 @@ No. of Sent Webmails: ${webmailCount}`;
                 const webmailLocLabel = formatLocationLabel(webmailLoc, mode);
 
                 webmailText +=
-                    `\n\nSENDING WEBMAILS:
+                    `\n\nSENDING WEBMAILS
 ${webmailLocLabel}
 Market Segment: ${webmailMarket}
 Product Line: ${webmailProductLine}
