@@ -59,7 +59,7 @@ function initDashboardPage() {
 
     function isWorkingDay(date) {
         const day = date.getDay();
-        // Weekend or holiday
+        // Weekend or holiday check
         return day !== 0 && day !== 6 && !holidays.some(h =>
             h.getFullYear() === date.getFullYear() &&
             h.getMonth() === date.getMonth() &&
@@ -70,7 +70,7 @@ function initDashboardPage() {
     function adjustToWorkingDay(date) {
         let adjusted = new Date(date);
         while (!isWorkingDay(adjusted)) {
-            adjusted.setDate(adjusted.getDate() - 1);
+            adjusted.setDate(adjusted.getDate() - 1); // Move to the previous day
         }
         return adjusted;
     }
@@ -81,9 +81,18 @@ function initDashboardPage() {
         const fifteenth = new Date(year, month, 15);
         const lastDay = new Date(year, month + 1, 0);
 
-        let payday = today <= fifteenth ? fifteenth : lastDay;
-        // Adjust if payday falls on weekend or holiday
-        return adjustToWorkingDay(payday);
+        // Check if today is the 15th and it's a working day
+        if (today.getDate() === 15 && isWorkingDay(fifteenth)) {
+            return fifteenth; // Return 15th if today is payday and a working day
+        }
+
+        // If today is before the 15th, payday is the 15th
+        if (today <= fifteenth) {
+            return adjustToWorkingDay(fifteenth); // Adjust to working day if 15th is holiday/weekend
+        }
+
+        // If today is after the 15th, payday is the last day of the month
+        return adjustToWorkingDay(lastDay); // Adjust to the last working day of the month
     }
 
     function workingDaysBetween(start, end) {
@@ -109,7 +118,8 @@ function initDashboardPage() {
     const workdaysLeft = workingDaysBetween(today, payday);
 
     const paydayMsg = document.getElementById("paydayMsg");
-    if (workdaysLeft === 0) {
+    if (today.getDate() === payday.getDate() && today.getMonth() === payday.getMonth()) {
+        // If today is payday
         paydayMsg.textContent = `Today is payday! (${formatDate(payday)})`;
     } else {
         paydayMsg.textContent = `Goal: ${formatDate(payday)} | ${workdaysLeft} working day${workdaysLeft !== 1 ? "s" : ""} left before payday!`;
