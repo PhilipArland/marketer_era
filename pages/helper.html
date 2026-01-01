@@ -61,9 +61,11 @@
                 <button id="normalizeDataBtn" class="btns btn-secondary btn-sm me-2">
                     <i class="bi bi-magic me-1"></i> Normalize Data
                 </button>
-
                 <button id="removeNaBtn" class="btns btn-secondary btn-sm me-2">
-                    <i class="bi bi-x-circle-fill me-1"></i> Remove N/A
+                    <i class="bi bi-x-circle me-1"></i> Remove N/A
+                </button>
+                <button id="autoFillBtn" class="btns btn-secondary btn-sm me-2">
+                    <i class="bi bi-arrow-down-square me-1"></i> Auto Fill
                 </button>
                 <button id="copyABBtn" class="btns btn-secondary btn-sm me-2">
                     <i class="bi bi-clipboard-check me-1"></i> Copy A + B
@@ -100,6 +102,15 @@
                 <div class="legend-item d-flex align-items-center w-100">
                     <button class="btns btn-sm btn-primary me-2"><i class="bi bi-x-circle-fill"></i></button>
                     <span>Remove N/A: Deletes rows where Column B is "N/A" or both Column A and B are empty.</span>
+                </div>
+                <div class="legend-item d-flex align-items-center w-100">
+                    <button class="btns btn-sm btn-primary me-2">
+                        <i class="bi bi-arrow-down-square"></i>
+                    </button>
+                    <span>
+                        Auto Fill: Fills empty cells in Column A using the last non-empty value above,
+                        when Column B contains an email.
+                    </span>
                 </div>
                 <div class="legend-item d-flex align-items-center w-100">
                     <button class="btns btn-sm btn-primary me-2"><i class="bi bi-clipboard-check"></i></button>

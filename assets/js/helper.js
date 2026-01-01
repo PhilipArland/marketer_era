@@ -214,6 +214,53 @@ function initHelperPage() {
         });
     }
 
+    // --------------------
+    // Auto Fill Column A Button
+    // --------------------
+    const autoFillBtn = document.getElementById("autoFillBtn");
+    if (autoFillBtn) {
+        autoFillBtn.addEventListener("click", () => {
+            saveTableToLocalStorage(); // save current state for Undo
+
+            console.log("Auto-filling Column A...");
+            const table = document.getElementById("excelGrid");
+            let filled = 0;
+            let lastValue = "";
+
+            for (let r = 1; r < table.rows.length; r++) { // skip header
+                const row = table.rows[r];
+                let rowChanged = false;
+
+                const cellA = row.cells[0];
+                const cellB = row.cells[1];
+
+                if (!cellA || !cellB) continue;
+
+                const aText = cellA.innerText.trim();
+                const bText = cellB.innerText.trim();
+
+                // Update lastValue when Column A has value
+                if (aText !== "") {
+                    lastValue = aText;
+                }
+                // Fill ONLY if A is empty and B has email
+                else if (bText !== "" && lastValue !== "") {
+                    cellA.innerText = lastValue;
+                    rowChanged = true;
+                }
+
+                if (rowChanged) filled++;
+            }
+
+            if (filled > 0) {
+                saveTableToLocalStorage(false);
+                console.log(`Auto-filled Column A in ${filled} rows.`);
+            } else {
+                console.log("No rows needed auto-fill.");
+            }
+        });
+    }
+
     const copyABBtn = document.getElementById("copyABBtn");
     if (copyABBtn && !copyABBtn.dataset.listenerAttached) {
         copyABBtn.addEventListener("click", () => {
