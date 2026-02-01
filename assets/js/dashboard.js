@@ -35,20 +35,19 @@ function initDashboardPage() {
     const holidays = [
         // Regular Holidays (Fixed dates)
         new Date(new Date().getFullYear(), 0, 1),    // Jan 1 — New Year’s Day
+        new Date(new Date().getFullYear(), 3, 2),   // Apr 2 — Maundy Thursday
+        new Date(new Date().getFullYear(), 3, 3),   // Apr 3 — Good Friday
         new Date(new Date().getFullYear(), 3, 9),    // Apr 9 — Araw ng Kagitingan
-        new Date(new Date().getFullYear(), 2, 28),   // Mar 28 — Maundy Thursday
-        new Date(new Date().getFullYear(), 2, 29),   // Mar 29 — Good Friday
         new Date(new Date().getFullYear(), 4, 1),    // May 1 — Labor Day
         new Date(new Date().getFullYear(), 5, 12),   // Jun 12 — Independence Day
-        new Date(new Date().getFullYear(), 7, 26),   // Aug 26 — National Heroes Day
+        new Date(new Date().getFullYear(), 7, 26),   // Aug 31 — National Heroes Day
         new Date(new Date().getFullYear(), 10, 30),  // Nov 30 — Bonifacio Day
         new Date(new Date().getFullYear(), 11, 25),  // Dec 25 — Christmas Day
         new Date(new Date().getFullYear(), 11, 30),  // Dec 30 — Rizal Day
 
         // Special (Non-Working) Holidays
-        new Date(new Date().getFullYear(), 1, 10),   // Feb 10 — Chinese New Year
-        new Date(new Date().getFullYear(), 1, 9),    // Feb 9 — Additional Special (Non-Working) Day
-        new Date(new Date().getFullYear(), 2, 30),   // Mar 30 — Black Saturday
+        new Date(new Date().getFullYear(), 1, 17),   // Feb 17 — Chinese New Year
+        new Date(new Date().getFullYear(), 3, 4),   // Apr 4 — Black Saturday
         new Date(new Date().getFullYear(), 7, 21),   // Aug 21 — Ninoy Aquino Day
         new Date(new Date().getFullYear(), 10, 1),   // Nov 1 — All Saints’ Day
         new Date(new Date().getFullYear(), 10, 2),   // Nov 2 — Additional special (Non-working) Day
