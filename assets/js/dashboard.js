@@ -265,7 +265,7 @@ function initDashboardPage() {
 
         newSet.innerHTML = `
         <div class="d-flex justify-content-between align-items-center">
-            <h5 class="mb-3">Email Sending</h5>
+            <h5 class="mb-3">Sending Emails</h5>
             <button class="btn btn-danger btn-sm remove-email-set" data-set-id="${id}">×</button>
         </div>
 
@@ -367,7 +367,7 @@ function initDashboardPage() {
 
         newSet.innerHTML = `
     <div class="d-flex justify-content-between align-items-center">
-        <h5 class="mb-3">Webmail Sending</h5>
+        <h5 class="mb-3">Sending Webmail</h5>
         <button class="btn btn-danger btn-sm remove-webmail-set" data-set-id="${id}">×</button>
     </div>
 

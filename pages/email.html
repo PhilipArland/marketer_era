@@ -256,89 +256,28 @@
                 <i class="bi bi-inbox-fill me-2"></i> Ez Email
             </h5>
 
-            <div class="row">
+            <button id="addEmailBtn" class="kb-btn fw-bold mb-4" style="font-size: 1.4rem; height: 50px;">
+                <span class="kb-symbol">+</span> Add 50 Emails
+            </button>
 
-                <!-- LEFT COLUMN: BUTTON + REPORT BOX -->
-                <div class="col-md-6 d-flex flex-column p-1 p-md-4">
-
-                    <!-- ADD BUTTON -->
-                    <button id="addEmailBtn" class="kb-btn fw-bold mb-4" style="font-size: 1.4rem; height: 50px;">
-                        <span class="kb-symbol">⌘</span> Add 50 Emails
+            <div class="d-flex justify-content-between align-items-center mb-2">
+                <h6 class="fw-bold">Report</h6>
+                <div class="d-flex">
+                    <button id="undoEmailReportBtn" class="btns btn-primary me-2">
+                        <i class="bi bi-arrow-counterclockwise"></i> Undo
                     </button>
-
-
-                    <!-- REPORT BOX -->
-                    <div style="width: 100%;">
-                        <div class="d-flex justify-content-between align-items-center mb-2">
-                            <h6 class="fw-bold">Report</h6>
-                            <div class="d-flex">
-                                <button id="undoEmailReportBtn" class="btns btn-primary me-2">
-                                    <i class="bi bi-arrow-counterclockwise"></i> Undo
-                                </button>
-                                <button id="clearEmailReportBtn" class="btn btn-sm btn-danger me-2">
-                                    <i class="bi bi-trash"></i> Clear
-                                </button>
-                            </div>
-                        </div>
-
-                        <textarea id="emailReportOutput" class="form-control mb-3" rows="6" readonly></textarea>
-
-                        <button id="copyEmailReportBtn" class="btns btn-primary w-100">
-                            <i class="bi bi-clipboard"></i> Copy
-                        </button>
-                    </div>
-
-                </div>
-
-                <!-- RIGHT COLUMN: LOOP -->
-                <div class="col-md-6">
-                    <div class="img-container">
-                        <img src="assets/img/loop.gif" alt="Loop" class="img-fluid rounded-4 shadow-sm"
-                            style="width: 100%; height: auto; object-fit: cover;">
-                    </div>
+                    <button id="clearEmailReportBtn" class="btn btn-sm btn-danger me-2">
+                        <i class="bi bi-trash"></i> Clear
+                    </button>
                 </div>
             </div>
 
-        </div>
-    </div>
+            <textarea id="emailReportOutput" class="form-control mb-3" rows="6" readonly></textarea>
 
-    <!-- Toggle Mini-Games Menu -->
-    <button class="btn btn-transparent" id="toggleMiniGamesBtn">
-        <i class="bi bi-dash"></i>
-    </button>
+            <button id="copyEmailReportBtn" class="btns btn-primary w-100">
+                <i class="bi bi-clipboard"></i> Copy
+            </button>
 
-    <!-- Mini-Games Buttons (Initially Hidden) -->
-    <div id="miniGamesMenu" style="display: none; margin-top: 10px; gap: 10px;">
-        <button id="openMinesweeperBtn" class="btns btn-primary w-100">Minesweeper</button>
-        <button id="open2048Btn" class="btn btn-success w-100">2048</button>
-        <button class="btn btn-secondary w-100" disabled>Coming Soon</button>
-    </div>
-
-    <!-- Minesweeper Game Card -->
-    <div class="card bg-transparent border-0">
-        <!-- <div class="col-lg-12 py-5 rounded-4" style="background-color: #34495e;"> -->
-        <div class="col-lg-12 py-5 rounded-4">
-            <div id="minesweeper" style="display: none;">
-                <div id="gameMessage" class="text-center text-light mb-3">Welcome to Minesweeper!</div>
-                <div id="game-board"></div>
-                <div class="d-flex align-items-center justify-content-center">
-                    <button id="resetMinesweeperBtn" class="btn btn-danger w-25 mt-3">Reset Game</button>
-                </div>
-            </div>
-
-            <div id="2048Card" class="card bg-transparent border-0" style="display: none;">
-                <div class="col-lg-12 py-5 rounded-4" style="background-color: #34495e;">
-                    <div id="game2048Message" class="text-center text-light mb-3">Use Arrow Keys or W/A/S/D</div>
-                    <div id="game2048Board"></div>
-                    <div class="d-flex align-items-center justify-content-center">
-                        <button id="reset2048Btn" class="btn btn-danger w-25 mt-3">Reset Game</button>
-                    </div>
-                    <div id="highScore2048" class="text-center text-light mt-3"
-                        style="font-size: 1.1rem; font-weight: 600;">
-                        High Score: 0
-                    </div>
-                </div>
-            </div>
         </div>
     </div>
 
